@@ -49,7 +49,7 @@ kotlin {
                 implementation("dev.icerock.moko:mvvm-flow-compose:0.16.1")
 
                 //navigation
-                val voyagerVersion = "1.0.0-rc06"
+                val voyagerVersion = "1.0.0-rc05"
                 implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 implementation("cafe.adriel.voyager:voyager-tab-navigator:$voyagerVersion")
             }

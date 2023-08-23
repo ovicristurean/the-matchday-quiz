@@ -22,7 +22,7 @@ fun HomeScreenBottomBar() {
         modifier = Modifier.fillMaxWidth(),
     ) {
         BottomBarItem(
-            tab = HomeTab(),
+            tab = HomeTab,
         )
 
         BottomBarItem(
