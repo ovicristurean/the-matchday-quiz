@@ -1,4 +1,4 @@
-package com.ovidiucristurean.thematchdayquiz.ui.screens.homescreen.view
+package com.ovidiucristurean.thematchdayquiz.ui.screens.home.view
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,16 +17,16 @@ import com.ovidiucristurean.thematchdayquiz.ui.navigation.HomeTab
 import com.ovidiucristurean.thematchdayquiz.ui.navigation.RankingsTab
 
 @Composable
-fun HomeScreenBottomBar() {
+fun HomeScreenBottomBar(homeTab: HomeTab) {
     NavigationBar(
         modifier = Modifier.fillMaxWidth(),
     ) {
         BottomBarItem(
-            tab = HomeTab,
+            tab = homeTab,
         )
 
         BottomBarItem(
-            tab = RankingsTab(),
+            tab = RankingsTab,
         )
     }
 }

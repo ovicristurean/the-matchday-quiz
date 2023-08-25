@@ -1,4 +1,4 @@
-package com.ovidiucristurean.thematchdayquiz.ui.screens.homescreen.view
+package com.ovidiucristurean.thematchdayquiz.ui.screens.home.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

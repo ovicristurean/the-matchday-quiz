@@ -21,7 +21,7 @@ kotlin {
             export("dev.icerock.moko:mvvm-core:0.16.1")
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -52,6 +52,10 @@ kotlin {
                 val voyagerVersion = "1.0.0-rc05"
                 implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
                 implementation("cafe.adriel.voyager:voyager-tab-navigator:$voyagerVersion")
+
+                //image loading
+                val imageLoaderVersion = "1.6.4"
+                api("io.github.qdsfdhvh:image-loader:$imageLoaderVersion")
             }
         }
         val commonTest by getting {

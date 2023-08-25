@@ -1,4 +1,4 @@
-package com.ovidiucristurean.thematchdayquiz.ui.screens.homescreen
+package com.ovidiucristurean.thematchdayquiz.ui.screens.home
 
 import com.ovidiucristurean.thematchdayquiz.ui.state.HomeScreenUiState
 import com.ovidiucristurean.thematchdayquiz.ui.state.viewdata.UserViewData
