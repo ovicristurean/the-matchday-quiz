@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import com.ovidiucristurean.thematchdayquiz.ui.widget.button.MatchdayButton
 import com.seiko.imageloader.rememberImagePainter
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
@@ -132,15 +131,8 @@ class QuizScreen : Screen {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Button(
+                MatchdayButton(
                     modifier = Modifier.weight(1f).height(40.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary,
-                    ),
-                    onClick = {
-
-                    }
                 ) {
                     Text(
                         text = answerOne,
@@ -148,12 +140,8 @@ class QuizScreen : Screen {
                     )
                 }
 
-                Button(
+                MatchdayButton(
                     modifier = Modifier.weight(1f).height(40.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary,
-                    ),
                     onClick = {
 
                     }
@@ -168,12 +156,8 @@ class QuizScreen : Screen {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Button(
+                MatchdayButton(
                     modifier = Modifier.weight(1f).height(40.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary,
-                    ),
                     onClick = {
 
                     }
@@ -184,12 +168,8 @@ class QuizScreen : Screen {
                     )
                 }
 
-                Button(
+                MatchdayButton(
                     modifier = Modifier.weight(1f).height(40.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary,
-                    ),
                     onClick = {
 
                     }
