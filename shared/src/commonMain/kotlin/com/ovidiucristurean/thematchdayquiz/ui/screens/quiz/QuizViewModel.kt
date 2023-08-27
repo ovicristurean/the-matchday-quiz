@@ -1,28 +1,67 @@
 package com.ovidiucristurean.thematchdayquiz.ui.screens.quiz
 
+import com.ovidiucristurean.thematchdayquiz.domain.model.QuizModel
+import com.ovidiucristurean.thematchdayquiz.domain.repository.QuizRepository
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class QuizViewModel : ViewModel() {
+class QuizViewModel(
+    private val quizRepository: QuizRepository,
+) : ViewModel() {
 
     private val _state = MutableStateFlow(QuizScreenUiState())
     val state = _state.asStateFlow()
 
     init {
         //mocked quiz data
+        viewModelScope.launch {
+            val currentQuiz = quizRepository.getCurrentQuiz()
+
+            _state.update {
+                QuizScreenUiState(
+                    numberOfQuestions = currentQuiz.size,
+                )
+            }
+
+            playQuiz(currentQuiz)
+        }
+    }
+
+    private fun playQuiz(quiz: List<QuizModel>) {
+        viewModelScope.launch {
+            quiz.forEachIndexed { index, _ ->
+                _state.update {
+                    it.copy(
+                        currentQuestionNumber = index + 1,
+                        currentQuestion = quiz[index],
+                    )
+                }
+
+                startTimer(10)
+            }
+        }
+    }
+
+    private suspend fun startTimer(seconds: Int) {
+        if (seconds <= 0) {
+            _state.update {
+                it.copy(
+                    timeLeftForQuestion = null
+                )
+            }
+            return
+        }
+
         _state.update {
-            QuizScreenUiState(
-                numberOfQuestions = 12,
-                currentQuestionNumber = 8,
-                imageUrl = "https://loremflickr.com/cache/resized/1712_25859505144_682b79f747_n_320_240_nofilter.jpg",
-                question = "question one",
-                answerOne = "answer one",
-                answerTwo = "answer two",
-                answerThree = "answer three",
-                answerFour = "answer four",
+            it.copy(
+                timeLeftForQuestion = seconds
             )
         }
+        delay(1000)
+        startTimer(seconds - 1)
     }
 }

@@ -1,9 +1,9 @@
 package com.ovidiucristurean.thematchdayquiz.ui.screens.quiz
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,9 +20,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import com.ovidiucristurean.thematchdayquiz.domain.repository.QuizRepositoryImpl
 import com.ovidiucristurean.thematchdayquiz.ui.widget.button.MatchdayButton
 import com.seiko.imageloader.rememberImagePainter
 import dev.icerock.moko.mvvm.compose.getViewModel
@@ -36,7 +38,7 @@ class QuizScreen : Screen {
         val viewModel = getViewModel(
             key = "quiz-screen",
             factory = viewModelFactory {
-                QuizViewModel()
+                QuizViewModel(QuizRepositoryImpl())
             }
         )
         val state by viewModel.state.collectAsState()
@@ -44,24 +46,32 @@ class QuizScreen : Screen {
         Column(
             modifier = Modifier.fillMaxSize()
                 .background(MaterialTheme.colorScheme.primary),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
+            QuizProgressView(
+                currentQuestionNumber = state.currentQuestionNumber ?: 0,
+                totalQuestions = state.numberOfQuestions ?: 0,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight(align = Alignment.Top)
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 20.dp)
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            AnimatedVisibility(
+                visible = state.timeLeftForQuestion != null
             ) {
-                QuizProgressView(
-                    currentQuestionNumber = state.currentQuestionNumber ?: 0,
-                    totalQuestions = state.numberOfQuestions ?: 0,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.TopCenter)
-                        .padding(horizontal = 20.dp)
-                        .padding(top = 20.dp)
+                Text(
+                    text = "Remaining time:\n${state.timeLeftForQuestion ?: ""}",
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    textAlign = TextAlign.Center,
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Column(
                 modifier = Modifier.weight(1f),
@@ -69,22 +79,22 @@ class QuizScreen : Screen {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "Who scored an own goal for Nottingham this gameweek?",
+                    text = state.currentQuestion?.question ?: "",
                     color = MaterialTheme.colorScheme.onPrimary,
                     textAlign = TextAlign.Center
                 )
 
                 Image(
                     modifier = Modifier.size(200.dp),
-                    painter = rememberImagePainter(state.imageUrl ?: ""),
+                    painter = rememberImagePainter(state.currentQuestion?.imageUrl ?: ""),
                     contentDescription = null,
                 )
 
                 AnswerOptions(
-                    answerOne = state.answerOne ?: "",
-                    answerTwo = state.answerTwo ?: "",
-                    answerThree = state.answerThree ?: "",
-                    answerFour = state.answerFour ?: "",
+                    answerOne = state.currentQuestion?.answerOne ?: "",
+                    answerTwo = state.currentQuestion?.answerTwo ?: "",
+                    answerThree = state.currentQuestion?.answerThree ?: "",
+                    answerFour = state.currentQuestion?.answerFour ?: "",
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
                 )
             }
@@ -128,57 +138,49 @@ class QuizScreen : Screen {
             modifier = modifier,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            MatchdayButton(
+                modifier = Modifier.fillMaxWidth().height(40.dp),
             ) {
-                MatchdayButton(
-                    modifier = Modifier.weight(1f).height(40.dp),
-                ) {
-                    Text(
-                        text = answerOne,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-
-                MatchdayButton(
-                    modifier = Modifier.weight(1f).height(40.dp),
-                    onClick = {
-
-                    }
-                ) {
-                    Text(
-                        text = answerTwo,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+                Text(
+                    text = answerOne,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
             }
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            MatchdayButton(
+                modifier = Modifier.fillMaxWidth().height(40.dp),
+                onClick = {
+
+                }
             ) {
-                MatchdayButton(
-                    modifier = Modifier.weight(1f).height(40.dp),
-                    onClick = {
+                Text(
+                    text = answerTwo,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
 
-                    }
-                ) {
-                    Text(
-                        text = answerThree,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
+            MatchdayButton(
+                modifier = Modifier.fillMaxWidth().height(40.dp),
+                onClick = {
+
                 }
+            ) {
+                Text(
+                    text = answerThree,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
 
-                MatchdayButton(
-                    modifier = Modifier.weight(1f).height(40.dp),
-                    onClick = {
+            MatchdayButton(
+                modifier = Modifier.fillMaxWidth().height(40.dp),
+                onClick = {
 
-                    }
-                ) {
-                    Text(
-                        text = answerFour,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
                 }
+            ) {
+                Text(
+                    text = answerFour,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     }
