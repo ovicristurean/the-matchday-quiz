@@ -24,10 +24,19 @@ class QuizViewModel(
             _state.update {
                 QuizScreenUiState(
                     numberOfQuestions = currentQuiz.size,
+                    quizState = QuizState.IN_PROGRESS,
                 )
             }
 
             playQuiz(currentQuiz)
+        }
+    }
+
+    fun selectAnswer(answerOptionsState: AnswerOptionsState) {
+        _state.update {
+            it.copy(
+                answerOptionsState = answerOptionsState
+            )
         }
     }
 
@@ -38,10 +47,17 @@ class QuizViewModel(
                     it.copy(
                         currentQuestionNumber = index + 1,
                         currentQuestion = quiz[index],
+                        answerOptionsState = AnswerOptionsState.NOTHING_SELECTED,
                     )
                 }
 
                 startTimer(10)
+            }
+
+            _state.update {
+                it.copy(
+                    quizState = QuizState.FINISHED,
+                )
             }
         }
     }

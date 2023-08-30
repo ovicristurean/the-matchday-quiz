@@ -20,6 +20,7 @@ enum class ButtonState { Pressed, Idle }
 
 fun Modifier.pressClickEffect(
     clickDepth: Dp,
+    enabled: Boolean = true,
 ) = composed {
     val buttonDepth = with(LocalDensity.current) { clickDepth.toPx() }
     var buttonState by remember { mutableStateOf(ButtonState.Idle) }
@@ -27,21 +28,27 @@ fun Modifier.pressClickEffect(
 
     this
         .graphicsLayer {
-            translationY = ty
+            if (enabled) {
+                translationY = ty
+            }
         }
         .clickable(
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
-            onClick = { }
+            enabled = enabled,
+            onClick = {
+            }
         )
         .pointerInput(buttonState) {
-            awaitPointerEventScope {
-                buttonState = if (buttonState == ButtonState.Pressed) {
-                    waitForUpOrCancellation()
-                    ButtonState.Idle
-                } else {
-                    awaitFirstDown(false)
-                    ButtonState.Pressed
+            if (enabled) {
+                awaitPointerEventScope {
+                    buttonState = if (buttonState == ButtonState.Pressed) {
+                        waitForUpOrCancellation()
+                        ButtonState.Idle
+                    } else {
+                        awaitFirstDown(false)
+                        ButtonState.Pressed
+                    }
                 }
             }
         }

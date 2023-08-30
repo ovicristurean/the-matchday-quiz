@@ -4,5 +4,5 @@ import com.ovidiucristurean.thematchdayquiz.domain.model.QuizModel
 
 interface QuizRepository {
 
-    suspend fun getCurrentQuiz():List<QuizModel>
+    suspend fun getCurrentQuiz(): List<QuizModel>
 }

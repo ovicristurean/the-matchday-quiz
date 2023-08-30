@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.ovidiucristurean.thematchdayquiz.domain.repository.QuizRepositoryImpl
 import com.ovidiucristurean.thematchdayquiz.ui.widget.button.MatchdayButton
 import com.seiko.imageloader.rememberImagePainter
@@ -42,61 +45,85 @@ class QuizScreen : Screen {
             }
         )
         val state by viewModel.state.collectAsState()
+        val navigator = LocalNavigator.currentOrThrow
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .background(MaterialTheme.colorScheme.primary),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            QuizProgressView(
-                currentQuestionNumber = state.currentQuestionNumber ?: 0,
-                totalQuestions = state.numberOfQuestions ?: 0,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .padding(top = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            AnimatedVisibility(
-                visible = state.timeLeftForQuestion != null
-            ) {
-                Text(
-                    text = "Remaining time:\n${state.timeLeftForQuestion ?: ""}",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.Center,
-                )
+        when (state.quizState) {
+            QuizState.NOT_STARTED -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = "Preparing the quiz for you"
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            QuizState.IN_PROGRESS -> {
+                Column(
+                    modifier = Modifier.fillMaxSize()
+                        .background(MaterialTheme.colorScheme.primary),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    QuizProgressView(
+                        currentQuestionNumber = state.currentQuestionNumber ?: 0,
+                        totalQuestions = state.numberOfQuestions ?: 0,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 20.dp)
+                    )
 
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = state.currentQuestion?.question ?: "",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.Center
-                )
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                Image(
-                    modifier = Modifier.size(200.dp),
-                    painter = rememberImagePainter(state.currentQuestion?.imageUrl ?: ""),
-                    contentDescription = null,
-                )
+                    AnimatedVisibility(
+                        visible = state.timeLeftForQuestion != null
+                    ) {
+                        Text(
+                            text = "Remaining time:\n${state.timeLeftForQuestion ?: ""}",
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
 
-                AnswerOptions(
-                    answerOne = state.currentQuestion?.answerOne ?: "",
-                    answerTwo = state.currentQuestion?.answerTwo ?: "",
-                    answerThree = state.currentQuestion?.answerThree ?: "",
-                    answerFour = state.currentQuestion?.answerFour ?: "",
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
-                )
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            text = state.currentQuestion?.question ?: "",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Image(
+                            modifier = Modifier.size(200.dp),
+                            painter = rememberImagePainter(state.currentQuestion?.imageUrl ?: ""),
+                            contentDescription = null,
+                        )
+
+                        AnswerOptions(
+                            answerOne = state.currentQuestion?.answerOne ?: "",
+                            answerTwo = state.currentQuestion?.answerTwo ?: "",
+                            answerThree = state.currentQuestion?.answerThree ?: "",
+                            answerFour = state.currentQuestion?.answerFour ?: "",
+                            onOptionSelected = {
+                                viewModel.selectAnswer(it)
+                            },
+                            selectedOption = state.answerOptionsState,
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                        )
+                    }
+                }
+            }
+
+            QuizState.FINISHED -> {
+                navigator.pop()
             }
         }
     }
@@ -132,6 +159,8 @@ class QuizScreen : Screen {
         answerTwo: String,
         answerThree: String,
         answerFour: String,
+        selectedOption: AnswerOptionsState,
+        onOptionSelected: (AnswerOptionsState) -> Unit,
         modifier: Modifier,
     ) {
         Column(
@@ -140,6 +169,11 @@ class QuizScreen : Screen {
         ) {
             MatchdayButton(
                 modifier = Modifier.fillMaxWidth().height(40.dp),
+                onClick = {
+                    onOptionSelected(AnswerOptionsState.OPTION_1_SELECTED)
+                },
+                isEnabled = selectedOption == AnswerOptionsState.OPTION_1_SELECTED ||
+                        selectedOption == AnswerOptionsState.NOTHING_SELECTED
             ) {
                 Text(
                     text = answerOne,
@@ -150,8 +184,10 @@ class QuizScreen : Screen {
             MatchdayButton(
                 modifier = Modifier.fillMaxWidth().height(40.dp),
                 onClick = {
-
-                }
+                    onOptionSelected(AnswerOptionsState.OPTION_2_SELECTED)
+                },
+                isEnabled = selectedOption == AnswerOptionsState.OPTION_2_SELECTED ||
+                        selectedOption == AnswerOptionsState.NOTHING_SELECTED
             ) {
                 Text(
                     text = answerTwo,
@@ -162,8 +198,10 @@ class QuizScreen : Screen {
             MatchdayButton(
                 modifier = Modifier.fillMaxWidth().height(40.dp),
                 onClick = {
-
-                }
+                    onOptionSelected(AnswerOptionsState.OPTION_3_SELECTED)
+                },
+                isEnabled = selectedOption == AnswerOptionsState.OPTION_3_SELECTED ||
+                        selectedOption == AnswerOptionsState.NOTHING_SELECTED
             ) {
                 Text(
                     text = answerThree,
@@ -174,8 +212,10 @@ class QuizScreen : Screen {
             MatchdayButton(
                 modifier = Modifier.fillMaxWidth().height(40.dp),
                 onClick = {
-
-                }
+                    onOptionSelected(AnswerOptionsState.OPTION_4_SELECTED)
+                },
+                isEnabled = selectedOption == AnswerOptionsState.OPTION_4_SELECTED ||
+                        selectedOption == AnswerOptionsState.NOTHING_SELECTED
             ) {
                 Text(
                     text = answerFour,

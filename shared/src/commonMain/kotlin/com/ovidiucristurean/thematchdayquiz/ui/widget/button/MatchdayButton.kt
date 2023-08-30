@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -28,6 +29,7 @@ fun MatchdayButton(
     depthColor: Color = MaterialTheme.colorScheme.onSecondary,
     buttonDepth: Dp = 4.dp,
     shape: Shape = RoundedCornerShape(12.dp),
+    isEnabled: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     val buttonShape by remember { mutableStateOf(shape) }
@@ -36,7 +38,7 @@ fun MatchdayButton(
     ) {
         Button(
             modifier = Modifier.fillMaxWidth(),
-            shape = buttonShape, //contentPadding = PaddingValues(16.dp),
+            shape = buttonShape,
             colors = ButtonDefaults.buttonColors(
                 containerColor = depthColor,
             ),
@@ -47,11 +49,13 @@ fun MatchdayButton(
         Button(
             modifier = Modifier.fillMaxWidth().pressClickEffect(
                 clickDepth = buttonDepth,
+                enabled = isEnabled,
             ),
             shape = buttonShape,
             colors = ButtonDefaults.buttonColors(
                 containerColor = buttonColor,
             ),
+            enabled = isEnabled,
             onClick = onClick,
         ) {
             content()
