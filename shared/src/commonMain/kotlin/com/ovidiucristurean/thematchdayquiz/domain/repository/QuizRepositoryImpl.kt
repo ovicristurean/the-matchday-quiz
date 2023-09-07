@@ -1,5 +1,6 @@
 package com.ovidiucristurean.thematchdayquiz.domain.repository
 
+import com.ovidiucristurean.thematchdayquiz.domain.model.QuizAnswer
 import com.ovidiucristurean.thematchdayquiz.domain.model.QuizModel
 
 class QuizRepositoryImpl : QuizRepository {
@@ -11,10 +12,24 @@ class QuizRepositoryImpl : QuizRepository {
                 QuizModel(
                     imageUrl = "https://loremflickr.com/cache/resized/1712_25859505144_682b79f747_n_320_240_nofilter.jpg",
                     question = "question $it",
-                    answerOne = "answer one for question $it",
-                    answerTwo = "answer two for question $it",
-                    answerThree = "answer three for question $it",
-                    answerFour = "answer four for question $it",
+                    answers = listOf(
+                        QuizAnswer(
+                            answer = "answer one for question $it",
+                            isCorrect = false
+                        ),
+                        QuizAnswer(
+                            answer = "answer two for question $it",
+                            isCorrect = false
+                        ),
+                        QuizAnswer(
+                            answer = "answer three for question $it",
+                            isCorrect = true,
+                        ),
+                        QuizAnswer(
+                            answer = "answer four for question $it",
+                            isCorrect = false
+                        )
+                    ),
                 )
             )
         }

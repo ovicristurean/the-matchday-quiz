@@ -3,8 +3,10 @@ package com.ovidiucristurean.thematchdayquiz.domain.model
 data class QuizModel(
     val imageUrl: String? = null,
     val question: String? = null,
-    val answerOne: String? = null,
-    val answerTwo: String? = null,
-    val answerThree: String? = null,
-    val answerFour: String? = null,
+    val answers: List<QuizAnswer>? = null,
+)
+
+data class QuizAnswer(
+    val answer: String,
+    val isCorrect: Boolean
 )

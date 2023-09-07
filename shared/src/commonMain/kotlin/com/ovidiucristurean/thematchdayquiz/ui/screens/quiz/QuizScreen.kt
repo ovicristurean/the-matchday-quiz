@@ -6,14 +6,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +26,10 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.ovidiucristurean.thematchdayquiz.domain.model.QuizAnswer
 import com.ovidiucristurean.thematchdayquiz.domain.repository.QuizRepositoryImpl
+import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.widget.AnswerOptions
+import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.widget.QuizProgressView
 import com.ovidiucristurean.thematchdayquiz.ui.widget.button.MatchdayButton
 import com.seiko.imageloader.rememberImagePainter
 import dev.icerock.moko.mvvm.compose.getViewModel
@@ -47,8 +48,8 @@ class QuizScreen : Screen {
         val state by viewModel.state.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
 
-        when (state.quizState) {
-            QuizState.NOT_STARTED -> {
+        when (state) {
+            QuizScreenUiState.QuizNotStarted -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
@@ -59,169 +60,102 @@ class QuizScreen : Screen {
                 }
             }
 
-            QuizState.IN_PROGRESS -> {
+            is QuizScreenUiState.QuizScreenInProgress -> {
+                println("state is ${(state as QuizScreenUiState.QuizScreenInProgress).selectedAnswer}")
+                QuizInProgressScreen(
+                    state = state as QuizScreenUiState.QuizScreenInProgress,
+                    onOptionSelected = { answer ->
+                        viewModel.selectAnswer(answer)
+                    }
+                )
+            }
+
+            QuizScreenUiState.QuizFinished -> {
                 Column(
                     modifier = Modifier.fillMaxSize()
-                        .background(MaterialTheme.colorScheme.primary),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .background(MaterialTheme.colorScheme.tertiary),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    QuizProgressView(
-                        currentQuestionNumber = state.currentQuestionNumber ?: 0,
-                        totalQuestions = state.numberOfQuestions ?: 0,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
-                            .padding(top = 20.dp)
+                    Text(
+                        text = "You finished the quiz",
+                        color = MaterialTheme.colorScheme.onTertiary
                     )
 
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    AnimatedVisibility(
-                        visible = state.timeLeftForQuestion != null
+                    MatchdayButton(
+                        onClick = {
+                            navigator.pop()
+                        }
                     ) {
                         Text(
-                            text = "Remaining time:\n${state.timeLeftForQuestion ?: ""}",
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        Text(
-                            text = state.currentQuestion?.question ?: "",
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            textAlign = TextAlign.Center
-                        )
-
-                        Image(
-                            modifier = Modifier.size(200.dp),
-                            painter = rememberImagePainter(state.currentQuestion?.imageUrl ?: ""),
-                            contentDescription = null,
-                        )
-
-                        AnswerOptions(
-                            answerOne = state.currentQuestion?.answerOne ?: "",
-                            answerTwo = state.currentQuestion?.answerTwo ?: "",
-                            answerThree = state.currentQuestion?.answerThree ?: "",
-                            answerFour = state.currentQuestion?.answerFour ?: "",
-                            onOptionSelected = {
-                                viewModel.selectAnswer(it)
-                            },
-                            selectedOption = state.answerOptionsState,
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                            text = "Close quiz",
+                            color = MaterialTheme.colorScheme.onTertiary
                         )
                     }
                 }
             }
-
-            QuizState.FINISHED -> {
-                navigator.pop()
-            }
         }
     }
+}
 
-    @Composable
-    private fun QuizProgressView(
-        currentQuestionNumber: Int,
-        totalQuestions: Int,
-        modifier: Modifier,
+@Composable
+private fun QuizInProgressScreen(
+    state: QuizScreenUiState.QuizScreenInProgress,
+    onOptionSelected: (QuizAnswer) -> Unit,
+) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .background(MaterialTheme.colorScheme.primary),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.CenterVertically,
+        QuizProgressView(
+            currentQuestionNumber = state.currentQuestionNumber ?: 0,
+            totalQuestions = state.numberOfQuestions ?: 0,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(top = 20.dp)
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        AnimatedVisibility(
+            visible = state.timeLeftForQuestion != null
         ) {
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 10.dp),
-                progress = (currentQuestionNumber - 1).toFloat() / (totalQuestions - 1),
-                color = MaterialTheme.colorScheme.secondary,
-                trackColor = MaterialTheme.colorScheme.onSecondary,
-            )
             Text(
-                text = "$currentQuestionNumber of $totalQuestions",
-                color = MaterialTheme.colorScheme.onPrimary
+                text = "Remaining time:\n${state.timeLeftForQuestion ?: ""}",
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimary,
+                textAlign = TextAlign.Center,
             )
         }
-    }
 
-    @Composable
-    private fun AnswerOptions(
-        answerOne: String,
-        answerTwo: String,
-        answerThree: String,
-        answerFour: String,
-        selectedOption: AnswerOptionsState,
-        onOptionSelected: (AnswerOptionsState) -> Unit,
-        modifier: Modifier,
-    ) {
+        Spacer(modifier = Modifier.height(20.dp))
+
         Column(
-            modifier = modifier,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            MatchdayButton(
-                modifier = Modifier.fillMaxWidth().height(40.dp),
-                onClick = {
-                    onOptionSelected(AnswerOptionsState.OPTION_1_SELECTED)
-                },
-                isEnabled = selectedOption == AnswerOptionsState.OPTION_1_SELECTED ||
-                        selectedOption == AnswerOptionsState.NOTHING_SELECTED
-            ) {
-                Text(
-                    text = answerOne,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
-            }
+            Text(
+                text = state.currentQuestion?.question ?: "",
+                color = MaterialTheme.colorScheme.onPrimary,
+                textAlign = TextAlign.Center
+            )
 
-            MatchdayButton(
-                modifier = Modifier.fillMaxWidth().height(40.dp),
-                onClick = {
-                    onOptionSelected(AnswerOptionsState.OPTION_2_SELECTED)
-                },
-                isEnabled = selectedOption == AnswerOptionsState.OPTION_2_SELECTED ||
-                        selectedOption == AnswerOptionsState.NOTHING_SELECTED
-            ) {
-                Text(
-                    text = answerTwo,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
+            Image(
+                modifier = Modifier.size(200.dp),
+                painter = rememberImagePainter(state.currentQuestion?.imageUrl ?: ""),
+                contentDescription = null,
+            )
 
-            MatchdayButton(
-                modifier = Modifier.fillMaxWidth().height(40.dp),
-                onClick = {
-                    onOptionSelected(AnswerOptionsState.OPTION_3_SELECTED)
-                },
-                isEnabled = selectedOption == AnswerOptionsState.OPTION_3_SELECTED ||
-                        selectedOption == AnswerOptionsState.NOTHING_SELECTED
-            ) {
-                Text(
-                    text = answerThree,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-
-            MatchdayButton(
-                modifier = Modifier.fillMaxWidth().height(40.dp),
-                onClick = {
-                    onOptionSelected(AnswerOptionsState.OPTION_4_SELECTED)
-                },
-                isEnabled = selectedOption == AnswerOptionsState.OPTION_4_SELECTED ||
-                        selectedOption == AnswerOptionsState.NOTHING_SELECTED
-            ) {
-                Text(
-                    text = answerFour,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
+            AnswerOptions(
+                answers = state.currentQuestion?.answers ?: listOf(),
+                onOptionSelected = onOptionSelected,
+                selectedOption = state.selectedAnswer,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+            )
         }
     }
 }
