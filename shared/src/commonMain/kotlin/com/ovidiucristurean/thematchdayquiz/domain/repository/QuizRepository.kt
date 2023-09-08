@@ -1,8 +1,8 @@
 package com.ovidiucristurean.thematchdayquiz.domain.repository
 
-import com.ovidiucristurean.thematchdayquiz.domain.model.QuizModel
+import com.ovidiucristurean.thematchdayquiz.domain.model.CurrentQuiz
 
 interface QuizRepository {
 
-    suspend fun getCurrentQuiz(): List<QuizModel>
+    suspend fun getCurrentQuiz(): CurrentQuiz
 }

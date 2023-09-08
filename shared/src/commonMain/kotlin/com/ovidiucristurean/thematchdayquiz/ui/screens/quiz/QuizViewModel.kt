@@ -1,7 +1,7 @@
 package com.ovidiucristurean.thematchdayquiz.ui.screens.quiz
 
+import com.ovidiucristurean.thematchdayquiz.domain.model.CurrentQuiz
 import com.ovidiucristurean.thematchdayquiz.domain.model.QuizAnswer
-import com.ovidiucristurean.thematchdayquiz.domain.model.QuizModel
 import com.ovidiucristurean.thematchdayquiz.domain.repository.QuizRepository
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
@@ -24,23 +24,34 @@ class QuizViewModel(
     init {
         //mocked quiz data
         viewModelScope.launch {
-            val currentQuiz = quizRepository.getCurrentQuiz()
 
-            quizInProgressState = QuizScreenUiState.QuizScreenInProgress(
-                numberOfQuestions = currentQuiz.size,
-                currentQuestionNumber = 1,
-                currentQuestion = currentQuiz[0],
-                timeLeftForQuestion = QUIZ_TIME,
-            )
-            _state.update {
-                quizInProgressState
+            when (val currentQuiz = quizRepository.getCurrentQuiz()) {
+                is CurrentQuiz.QuizNotReady -> {
+
+                }
+
+                is CurrentQuiz.QuizNotAvailable -> {
+
+                }
+
+                is CurrentQuiz.AvailableQuiz -> {
+                    quizInProgressState = QuizScreenUiState.QuizScreenInProgress(
+                        numberOfQuestions = currentQuiz.questions.size,
+                        currentQuestionNumber = 1,
+                        currentQuestion = currentQuiz.questions.firstOrNull(),
+                        timeLeftForQuestion = currentQuiz.questions.firstOrNull()?.timePerQuestion,
+                    )
+                    _state.update {
+                        quizInProgressState
+                    }
+
+                    playQuiz(currentQuiz)
+                }
             }
-
-            playQuiz(currentQuiz)
         }
     }
 
-    fun selectAnswer(answer:QuizAnswer) {
+    fun selectAnswer(answer: QuizAnswer) {
         quizInProgressState = quizInProgressState.copy(
             selectedAnswer = answer
         )
@@ -49,19 +60,19 @@ class QuizViewModel(
         }
     }
 
-    private fun playQuiz(quiz: List<QuizModel>) {
+    private fun playQuiz(quiz: CurrentQuiz.AvailableQuiz) {
         viewModelScope.launch {
-            quiz.forEachIndexed { index, _ ->
+            quiz.questions.forEachIndexed { index, _ ->
                 quizInProgressState = quizInProgressState.copy(
                     currentQuestionNumber = index + 1,
-                    currentQuestion = quiz[index],
+                    currentQuestion = quiz.questions[index],
                     selectedAnswer = null,
                 )
                 _state.update {
                     quizInProgressState
                 }
 
-                startTimer(QUIZ_TIME)
+                startTimer(quiz.questions[index].timePerQuestion ?: 0)
             }
 
             _state.update {
@@ -89,9 +100,5 @@ class QuizViewModel(
         }
         delay(1000)
         startTimer(seconds - 1)
-    }
-
-    private companion object {
-        const val QUIZ_TIME = 5
     }
 }

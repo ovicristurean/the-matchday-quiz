@@ -12,8 +12,7 @@ sealed interface QuizScreenUiState {
         val currentQuestionNumber: Int? = null,
         val currentQuestion: QuizModel? = null,
         val timeLeftForQuestion: Int? = null,
-        val selectedAnswer: QuizAnswer?=null,
-        //val answerOptionsState: AnswerOptionsState = AnswerOptionsState.NOTHING_SELECTED,
+        val selectedAnswer: QuizAnswer? = null,
         val totalScore: Int = 0
     ) : QuizScreenUiState
 
