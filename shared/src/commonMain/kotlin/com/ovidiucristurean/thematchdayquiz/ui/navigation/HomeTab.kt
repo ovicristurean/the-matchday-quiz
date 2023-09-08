@@ -9,7 +9,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.HomeScreen
 
-class HomeTab(
+internal class HomeTab(
     val onQuizOpenRequested: () -> Unit,
 ) : Tab {
 

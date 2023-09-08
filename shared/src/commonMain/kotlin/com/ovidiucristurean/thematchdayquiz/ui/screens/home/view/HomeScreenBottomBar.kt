@@ -17,7 +17,7 @@ import com.ovidiucristurean.thematchdayquiz.ui.navigation.HomeTab
 import com.ovidiucristurean.thematchdayquiz.ui.navigation.RankingsTab
 
 @Composable
-fun HomeScreenBottomBar(homeTab: HomeTab) {
+internal fun HomeScreenBottomBar(homeTab: HomeTab) {
     NavigationBar(
         modifier = Modifier.fillMaxWidth(),
     ) {
