@@ -154,7 +154,13 @@ private fun QuizInProgressScreen(
                 answers = state.currentQuestion?.answers ?: listOf(),
                 onOptionSelected = onOptionSelected,
                 selectedOption = state.selectedAnswer,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                modifier = Modifier.fillMaxWidth().weight(1f).padding(horizontal = 20.dp)
+            )
+
+            Text(
+                modifier = Modifier.padding(vertical = 16.dp),
+                text = "Total score: ${state.totalScore}",
+                color = MaterialTheme.colorScheme.onPrimary,
             )
         }
     }
