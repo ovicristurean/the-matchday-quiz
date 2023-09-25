@@ -1,8 +1,8 @@
-package com.ovidiucristurean.thematchdayquiz.domain.repository
+package com.ovidiucristurean.quiz.domain.repository
 
-import com.ovidiucristurean.thematchdayquiz.domain.model.CurrentQuiz
-import com.ovidiucristurean.thematchdayquiz.domain.model.QuizAnswer
-import com.ovidiucristurean.thematchdayquiz.domain.model.QuizModel
+import com.ovidiucristurean.quiz.domain.model.CurrentQuiz
+import com.ovidiucristurean.quiz.domain.model.QuizAnswer
+import com.ovidiucristurean.quiz.domain.model.QuizModel
 
 val mockedAvailableQuizzes = CurrentQuiz.AvailableQuiz(mutableListOf<QuizModel>().apply {
     (1..12).forEach {

@@ -1,4 +1,4 @@
-package com.ovidiucristurean.thematchdayquiz.ui.screens.quiz
+package com.ovidiucristurean.quiz.presentation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -26,11 +26,11 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.ovidiucristurean.thematchdayquiz.domain.model.QuizAnswer
-import com.ovidiucristurean.thematchdayquiz.domain.repository.QuizRepositoryImpl
-import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.widget.AnswerOptions
-import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.widget.QuizProgressView
-import com.ovidiucristurean.thematchdayquiz.ui.widget.button.MatchdayButton
+import com.ovidiucristurean.quiz.domain.model.QuizAnswer
+import com.ovidiucristurean.quiz.domain.repository.QuizRepositoryImpl
+import com.ovidiucristurean.quiz.presentation.widget.AnswerOptions
+import com.ovidiucristurean.quiz.presentation.widget.QuizProgressView
+import com.ovidiucristurean.widgets.button.MatchdayButton
 import com.seiko.imageloader.rememberImagePainter
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory

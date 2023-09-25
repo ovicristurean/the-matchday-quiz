@@ -15,21 +15,14 @@ kotlin {
             }
         }
     }
-
-    targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java).all {
-        binaries.withType(org.jetbrains.kotlin.gradle.plugin.mpp.Framework::class.java).all {
-            export(libs.moko.mvvm.core)
-        }
-    }
-
+    
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "shared"
-            isStatic = true
+            baseName = "quiz"
         }
     }
 
@@ -39,9 +32,6 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
-                implementation(compose.materialIconsExtended)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
 
                 implementation(libs.moko.mvvm.core)
                 implementation(libs.moko.mvvm.compose)
@@ -55,7 +45,6 @@ kotlin {
                 //image loading
                 api(libs.image.loader)
 
-                implementation(project(":quiz"))
                 implementation(project(":widgets"))
             }
         }
@@ -64,24 +53,11 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.androidx.appcompat)
-                implementation(libs.androidx.activity.compose)
-            }
-        }
-        val androidUnitTest by getting
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
     }
 }
 
 android {
-    namespace = "com.ovidiucristurean.thematchdayquiz"
+    namespace = "com.ovidiucristurean.quiz"
     compileSdk = 33
     defaultConfig {
         minSdk = 24
@@ -90,13 +66,4 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-}
-
-dependencies {
-    implementation(libs.androidx.core)
-    implementation(project(mapOf("path" to ":quiz")))
-    commonMainApi(libs.moko.mvvm.core)
-    commonMainApi(libs.moko.mvvm.compose)
-    commonMainApi(libs.moko.mvvm.flow)
-    commonMainApi(libs.moko.mvvm.flow.compose)
 }

@@ -1,6 +1,6 @@
-package com.ovidiucristurean.thematchdayquiz.domain.repository
+package com.ovidiucristurean.quiz.domain.repository
 
-import com.ovidiucristurean.thematchdayquiz.domain.model.CurrentQuiz
+import com.ovidiucristurean.quiz.domain.model.CurrentQuiz
 
 class QuizRepositoryImpl : QuizRepository {
 

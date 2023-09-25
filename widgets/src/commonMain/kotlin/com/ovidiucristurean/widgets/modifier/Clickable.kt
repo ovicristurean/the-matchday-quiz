@@ -1,4 +1,4 @@
-package com.ovidiucristurean.thematchdayquiz.ui.modifier
+package com.ovidiucristurean.widgets.modifier
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable

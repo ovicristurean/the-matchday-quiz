@@ -1,6 +1,5 @@
-package com.ovidiucristurean.thematchdayquiz.ui.widget.button
+package com.ovidiucristurean.widgets.button
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,13 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.ovidiucristurean.thematchdayquiz.ui.modifier.pressClickEffect
+import com.ovidiucristurean.widgets.modifier.pressClickEffect
 
 @Composable
 fun MatchdayButton(

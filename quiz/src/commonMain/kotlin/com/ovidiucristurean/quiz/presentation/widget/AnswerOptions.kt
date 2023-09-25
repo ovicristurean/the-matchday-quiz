@@ -1,4 +1,4 @@
-package com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.widget
+package com.ovidiucristurean.quiz.presentation.widget
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,15 +8,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ovidiucristurean.thematchdayquiz.domain.model.QuizAnswer
-import com.ovidiucristurean.thematchdayquiz.ui.widget.button.MatchdayButton
+import com.ovidiucristurean.quiz.domain.model.QuizAnswer
+import com.ovidiucristurean.widgets.button.MatchdayButton
 
 @Composable
 internal fun AnswerOptions(
