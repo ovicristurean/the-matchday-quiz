@@ -48,7 +48,7 @@ class QuizScreen : Screen {
         val state by viewModel.state.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
 
-        when (state) {
+        when (val quizState = state) {
             QuizScreenUiState.QuizNotStarted -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -61,24 +61,28 @@ class QuizScreen : Screen {
             }
 
             is QuizScreenUiState.QuizScreenInProgress -> {
-                println("state is ${(state as QuizScreenUiState.QuizScreenInProgress).selectedAnswer}")
                 QuizInProgressScreen(
-                    state = state as QuizScreenUiState.QuizScreenInProgress,
+                    state = quizState,
                     onOptionSelected = { answer ->
                         viewModel.selectAnswer(answer)
                     }
                 )
             }
 
-            QuizScreenUiState.QuizFinished -> {
+            is QuizScreenUiState.QuizFinished -> {
                 Column(
                     modifier = Modifier.fillMaxSize()
                         .background(MaterialTheme.colorScheme.tertiary),
-                    verticalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         text = "You finished the quiz",
+                        color = MaterialTheme.colorScheme.onTertiary
+                    )
+
+                    Text(
+                        text = "Your total score is ${quizState.result.numberOfPoints}",
                         color = MaterialTheme.colorScheme.onTertiary
                     )
 

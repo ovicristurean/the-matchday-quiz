@@ -17,5 +17,11 @@ sealed interface QuizScreenUiState {
         val totalScore: Int = 0
     ) : QuizScreenUiState
 
-    object QuizFinished : QuizScreenUiState
+    data class QuizFinished(
+        val result: QuizResult
+    ) : QuizScreenUiState
 }
+
+data class QuizResult(
+    val numberOfPoints: Int
+)

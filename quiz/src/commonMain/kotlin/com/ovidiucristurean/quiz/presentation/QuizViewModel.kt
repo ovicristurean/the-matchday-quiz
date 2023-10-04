@@ -19,7 +19,7 @@ class QuizViewModel(
         MutableStateFlow(QuizScreenUiState.QuizNotStarted)
     val state: StateFlow<QuizScreenUiState> = _state.asStateFlow()
 
-    var quizInProgressState = QuizScreenUiState.QuizScreenInProgress()
+    private var quizInProgressState = QuizScreenUiState.QuizScreenInProgress()
     private var answeredQuestionsSet = mutableSetOf<QuizAnswer>()
 
     init {
@@ -53,7 +53,7 @@ class QuizViewModel(
     }
 
     fun selectAnswer(answer: QuizAnswer) {
-        if(!answeredQuestionsSet.contains(answer)) {
+        if (!answeredQuestionsSet.contains(answer)) {
             quizInProgressState = quizInProgressState.copy(
                 selectedAnswer = answer,
                 totalScore = if (answer.isCorrect) quizInProgressState.totalScore + 1 else quizInProgressState.totalScore
@@ -107,10 +107,14 @@ class QuizViewModel(
 
     private fun finishGame() {
         _state.update {
-            QuizScreenUiState.QuizFinished
+            QuizScreenUiState.QuizFinished(
+                QuizResult(
+                    numberOfPoints = quizInProgressState.totalScore
+                )
+            )
         }
 
-        //reset answered questions
+        quizInProgressState = QuizScreenUiState.QuizScreenInProgress()
         answeredQuestionsSet.clear()
     }
 }
