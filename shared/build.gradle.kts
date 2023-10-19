@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("org.jetbrains.compose")
+    id("com.squareup.sqldelight")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -55,6 +56,10 @@ kotlin {
                 //image loading
                 api(libs.image.loader)
 
+                //sqldelight
+                implementation(libs.sqldelight.runtime)
+                implementation(libs.sqldelight.coroutine.extensions)
+
                 implementation(project(":quiz"))
                 implementation(project(":widgets"))
             }
@@ -68,15 +73,31 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.activity.compose)
+                implementation(libs.sqldelight.android)
             }
         }
         val androidUnitTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
+        val iosMain by getting {
+            dependencies {
+                implementation(libs.sqldelight.ios)
+            }
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
         val iosX64Test by getting
         val iosArm64Test by getting
         val iosSimulatorArm64Test by getting
+        val iosTest by getting {
+            dependsOn(commonTest)
+            iosX64Test.dependsOn(this)
+            iosArm64Test.dependsOn(this)
+            iosSimulatorArm64Test.dependsOn(this)
+        }
     }
 }
 
@@ -89,6 +110,21 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+/*sqldelight {
+    databases {
+        create("database") {
+            packageName.set("com.ovidiucristurean.thematchdayquiz.database")
+        }
+    }
+}*/
+
+sqldelight {
+    database("MatchdayDatabase") {
+        packageName = "com.ovidiucristurean.thematchdayquiz.database"
+        sourceFolders = listOf("sqldelight")
     }
 }
 

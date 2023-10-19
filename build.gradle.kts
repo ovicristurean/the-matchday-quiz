@@ -1,3 +1,10 @@
+buildscript {
+
+    dependencies {
+        classpath(libs.sqldelight.gradle.plugin)
+    }
+}
+
 plugins {
     kotlin("multiplatform").apply(false)
     id("com.android.application").apply(false)

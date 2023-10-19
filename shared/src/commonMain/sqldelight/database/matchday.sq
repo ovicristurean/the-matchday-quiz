@@ -1,0 +1,21 @@
+CREATE TABLE past_quiz_result(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    date INTEGER
+);
+
+CREATE TABLE past_quiz_question(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    question TEXT NOT NULL,
+    selectedAnswerId INTEGER,
+    quizResultId INTEGER
+);
+
+CREATE TABLE past_quiz_answer(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    questionId INTEGER,
+    answer TEXT
+);
+
+getPastResults:
+SELECT *
+FROM past_quiz_result;
