@@ -3,6 +3,8 @@ androidx-core = "1.10.1"
 androidx-activity-compose = "1.7.2"
 androidx-appcompat = "1.6.1"
 firebase-common-ktx = "20.4.2"
+firebase-firestore = "1.8.1"
+kotlinx-serialization-json = "1.5.1"
 moko-mvvm = "0.16.1"
 voyager = "1.0.0-rc05"
 image-loader = "1.6.4"
@@ -10,7 +12,10 @@ image-loader = "1.6.4"
 [libraries]
 androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
+firebase-common = { module = "dev.gitlive:firebase-common", version.ref = "firebase-firestore" }
 firebase-common-ktx = { module = "com.google.firebase:firebase-common-ktx", version.ref = "firebase-common-ktx" }
+firebase-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "firebase-firestore" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 moko-mvvm-core = { module = "dev.icerock.moko:mvvm-core", version.ref = "moko-mvvm" }
 moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "moko-mvvm" }
 moko-mvvm-flow = { module = "dev.icerock.moko:mvvm-flow", version.ref = "moko-mvvm" }

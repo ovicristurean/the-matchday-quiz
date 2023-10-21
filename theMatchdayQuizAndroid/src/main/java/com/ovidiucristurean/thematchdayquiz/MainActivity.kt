@@ -12,6 +12,7 @@ import com.google.firebase.ktx.initialize
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //TODO migrate to KTX API from Firebase
         Firebase.initialize(this)
         setContent {
             App(

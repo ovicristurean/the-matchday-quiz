@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("org.jetbrains.compose")
+    kotlin("plugin.serialization") version "1.8.20"
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -57,6 +58,11 @@ kotlin {
 
                 implementation(project(":quiz"))
                 implementation(project(":widgets"))
+
+                //gitlive
+                implementation(libs.firebase.firestore)
+                implementation(libs.firebase.common)
+                implementation(libs.kotlinx.serialization.json)
             }
         }
         val commonTest by getting {
