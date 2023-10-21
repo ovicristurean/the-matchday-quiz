@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "525162982911",
+    "project_id": "the-matchday-quiz",
+    "storage_bucket": "the-matchday-quiz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525162982911:android:b941d91828d2b8ea6a8bca",
+        "android_client_info": {
+          "package_name": "com.ovidiucristurean.thematchdayquiz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALkXDgrbHnxvSH-LNbiXF603UZ8ueAkjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

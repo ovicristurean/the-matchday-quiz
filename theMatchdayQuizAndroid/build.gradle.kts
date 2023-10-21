@@ -2,13 +2,14 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("org.jetbrains.compose")
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.ovidiucristurean.thematchdayquiz.android"
+    namespace = "com.ovidiucristurean.thematchdayquiz"
     compileSdk = 33
     defaultConfig {
-        applicationId = "com.ovidiucristurean.thematchdayquiz.android"
+        applicationId = "com.ovidiucristurean.thematchdayquiz"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -47,4 +48,9 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.4.0")
     implementation("androidx.compose.material:material:1.4.0")
     implementation("androidx.activity:activity-compose:1.7.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:30.0.1"))
+
+    //firebase common
+    implementation("com.google.firebase:firebase-common-ktx:20.3.3")
 }
