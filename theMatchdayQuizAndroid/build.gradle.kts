@@ -52,5 +52,5 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:30.0.1"))
 
     //firebase common
-    implementation("com.google.firebase:firebase-common-ktx:20.3.3")
+    implementation(libs.firebase.common.ktx)
 }
