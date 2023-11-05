@@ -58,11 +58,16 @@ kotlin {
 
                 implementation(project(":quiz"))
                 implementation(project(":widgets"))
+                implementation(project(":splash"))
 
                 //gitlive
                 implementation(libs.firebase.firestore)
                 implementation(libs.firebase.common)
                 implementation(libs.kotlinx.serialization.json)
+                implementation(libs.gitlive.firebase.auth)
+
+                //koin
+                api(libs.koin.core)
             }
         }
         val commonTest by getting {
@@ -74,6 +79,8 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.appcompat)
                 implementation(libs.androidx.activity.compose)
+                implementation(libs.firebase.facebook)
+                implementation(libs.play.services.auth)
             }
         }
         val androidUnitTest by getting

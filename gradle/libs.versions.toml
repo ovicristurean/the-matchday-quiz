@@ -2,16 +2,25 @@
 androidx-core = "1.10.1"
 androidx-activity-compose = "1.7.2"
 androidx-appcompat = "1.6.1"
+firebase-ui-auth = "7.2.0"
+gitlive-firebase-auth = "1.10.0"
 firebase-common-ktx = "20.4.2"
 firebase-firestore = "1.8.1"
 kotlinx-serialization-json = "1.5.1"
 moko-mvvm = "0.16.1"
+play-services-auth = "20.6.0"
 voyager = "1.0.0-rc05"
 image-loader = "1.6.4"
+lifecycle = "2.6.1"
+koin = "3.4.3"
+koin-compose = "1.0.4"
+firebase-facebook = "15.0.2"
 
 [libraries]
 androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
+firebase-ui-auth = { module = "com.firebaseui:firebase-ui-auth", version.ref = "firebase-ui-auth" }
+gitlive-firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "gitlive-firebase-auth" }
 firebase-common = { module = "dev.gitlive:firebase-common", version.ref = "firebase-firestore" }
 firebase-common-ktx = { module = "com.google.firebase:firebase-common-ktx", version.ref = "firebase-common-ktx" }
 firebase-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "firebase-firestore" }
@@ -21,6 +30,13 @@ moko-mvvm-compose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "m
 moko-mvvm-flow = { module = "dev.icerock.moko:mvvm-flow", version.ref = "moko-mvvm" }
 moko-mvvm-flow-compose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "moko-mvvm" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-tab-navigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }
+lifecycle-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+firebase-facebook = { module = "com.facebook.android:facebook-android-sdk", version.ref = "firebase-facebook" }

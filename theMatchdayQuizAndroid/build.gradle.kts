@@ -48,9 +48,19 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.4.0")
     implementation("androidx.compose.material:material:1.4.0")
     implementation("androidx.activity:activity-compose:1.7.0")
+    implementation(libs.lifecycle.compose)
 
     implementation(platform("com.google.firebase:firebase-bom:30.0.1"))
+    implementation("com.google.firebase:firebase-messaging-ktx")
+
+    implementation(libs.firebase.ui.auth)
+    implementation(libs.play.services.auth)
 
     //firebase common
     implementation(libs.firebase.common.ktx)
+
+    //koin
+    implementation(libs.koin.compose)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.android)
 }
