@@ -81,6 +81,7 @@ kotlin {
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.firebase.facebook)
                 implementation(libs.play.services.auth)
+                implementation(libs.koin.android)
             }
         }
         val androidUnitTest by getting

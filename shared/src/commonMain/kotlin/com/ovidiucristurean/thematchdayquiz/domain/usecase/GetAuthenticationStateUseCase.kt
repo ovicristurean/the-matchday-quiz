@@ -1,4 +1,4 @@
-package com.ovidiucristurean.thematchdayquiz.data.firebase.auth.usecase
+package com.ovidiucristurean.thematchdayquiz.domain.usecase
 
 import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthenticationService
 import kotlinx.coroutines.flow.filterNotNull

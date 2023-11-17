@@ -9,7 +9,7 @@ import androidx.compose.runtime.setValue
 //import com.barabasizsolt.mova.auth.api.AuthenticationState
 //import com.barabasizsolt.mova.domain.usecase.auth.IsLoggedInUseCase
 import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthenticationState
-import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.usecase.GetAuthenticationStateUseCase
+import com.ovidiucristurean.thematchdayquiz.domain.usecase.GetAuthenticationStateUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
