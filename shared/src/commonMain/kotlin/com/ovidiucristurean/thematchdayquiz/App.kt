@@ -8,6 +8,7 @@ import com.ovidiucristurean.splash.ui.SplashScreen
 import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthenticationState
 import com.ovidiucristurean.thematchdayquiz.ui.navigation.MainScreen
 import com.ovidiucristurean.thematchdayquiz.ui.screens.signup.EmailSignInScreen
+import com.ovidiucristurean.thematchdayquiz.ui.screens.signup.RegisterScreen
 import com.ovidiucristurean.thematchdayquiz.ui.screens.signup.SignInScreen
 
 @Composable
@@ -31,6 +32,9 @@ fun App(
                         navigator.replace(item = SignInScreen(
                             onGoogleSignInClicked = {
                                 navigator.push(EmailSignInScreen())
+                            },
+                            onRegisterClicked = {
+                                navigator.push(RegisterScreen())
                             }
                         ))
                     }

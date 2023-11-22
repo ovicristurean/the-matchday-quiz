@@ -10,4 +10,5 @@ actual fun createAppModule(): List<Module> = buildList {
     add(activityProviderModule)
     add(commonModule)
     addAll(createAuthenticationModule())
+    add(useCaseModule)
 }

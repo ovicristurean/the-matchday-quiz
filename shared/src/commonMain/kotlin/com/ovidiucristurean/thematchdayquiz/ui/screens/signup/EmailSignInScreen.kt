@@ -51,8 +51,7 @@ class EmailSignInScreen : Screen, KoinComponent {
                     }
 
                     LoginResult.NOT_LOGGED -> {
-                        //TODO handle user not logged in properly
-                        navigator.push(MainScreen())
+                        //do nothing for now
                     }
                 }
             }

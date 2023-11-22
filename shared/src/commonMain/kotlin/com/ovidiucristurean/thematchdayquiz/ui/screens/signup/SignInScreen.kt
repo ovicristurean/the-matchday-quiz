@@ -2,8 +2,10 @@ package com.ovidiucristurean.thematchdayquiz.ui.screens.signup
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -16,7 +18,8 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 
 class SignInScreen(
-    val onGoogleSignInClicked: () -> Unit
+    val onGoogleSignInClicked: () -> Unit,
+    val onRegisterClicked: () -> Unit,
 ) : Screen {
 
     @Composable
@@ -26,7 +29,17 @@ class SignInScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            GoogleLoginButton(
+            EmailLoginButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+
+            Spacer(
+                modifier = Modifier.height(16.dp)
+            )
+
+            RegisterButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -35,7 +48,7 @@ class SignInScreen(
     }
 
     @Composable
-    fun GoogleLoginButton(
+    fun EmailLoginButton(
         modifier: Modifier = Modifier,
     ) {
         Button(
@@ -44,10 +57,25 @@ class SignInScreen(
             onClick = onGoogleSignInClicked
         ) {
             Text(
-                text = "Sign in with Google",
+                text = "Sign in with e-mail",
                 textAlign = TextAlign.Center
             )
         }
     }
 
+    @Composable
+    fun RegisterButton(
+        modifier: Modifier = Modifier,
+    ) {
+        Button(
+            modifier = modifier,
+            shape = MaterialTheme.shapes.medium,
+            onClick = onRegisterClicked
+        ) {
+            Text(
+                text = "Register",
+                textAlign = TextAlign.Center
+            )
+        }
+    }
 }
