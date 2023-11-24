@@ -3,11 +3,12 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.compose")
     kotlin("plugin.serialization") version "1.8.20"
+    alias(libs.plugins.cocoapods)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default()
+    //targetHierarchy.default()
 
     android {
         compilations.all {
@@ -16,6 +17,9 @@ kotlin {
             }
         }
     }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java).all {
         binaries.withType(org.jetbrains.kotlin.gradle.plugin.mpp.Framework::class.java).all {
@@ -23,15 +27,23 @@ kotlin {
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
+    cocoapods {
+        version = "1.0"
+        summary = "Kotlin Multiplatform shared module for MatchdayQuiz app."
+        homepage = "https://github.com/ovicristurean/the-matchday-quiz"
+        name = "shared"
+        ios.deploymentTarget = "14.1"
+        podfile = project.file("../theMatchdayQuizIos/Podfile")
+
+        framework {
             baseName = "shared"
             isStatic = true
+            transitiveExport = false
+            embedBitcode(org.jetbrains.kotlin.gradle.plugin.mpp.Framework.BitcodeEmbeddingMode.BITCODE)
         }
+
+        xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.DEBUG
+        xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.RELEASE
     }
 
     sourceSets {
@@ -85,12 +97,16 @@ kotlin {
             }
         }
         val androidUnitTest by getting
+
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
+        val iosMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+        }
     }
 }
 

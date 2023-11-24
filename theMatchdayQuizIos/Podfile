@@ -1,0 +1,7 @@
+target 'theMatchdayQuizIos' do
+  use_frameworks!
+  platform :ios, '14.1'
+  project 'theMatchdayQuizIos.xcodeproj'
+  pod 'shared', :path => '../shared'
+  pod 'FirebaseAuth'
+end
