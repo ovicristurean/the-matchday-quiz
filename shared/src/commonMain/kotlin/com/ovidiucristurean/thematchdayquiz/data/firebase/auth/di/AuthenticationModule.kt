@@ -7,5 +7,3 @@ import org.koin.dsl.module
 
 
 expect fun createAuthenticationModule(): List<Module>
-
-val commonModule: Module = module { single<AuthenticationService> { AuthenticationServiceImpl() } }
