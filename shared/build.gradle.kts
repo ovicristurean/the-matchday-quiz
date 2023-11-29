@@ -3,7 +3,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.compose")
     kotlin("plugin.serialization") version "1.8.20"
-    //alias(libs.plugins.cocoapods)
+    id("io.github.luca992.multiplatform-swiftpackage") version "2.2.0"
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -34,25 +34,6 @@ kotlin {
         }
     }
 
-    /*cocoapods {
-        version = "1.0"
-        summary = "Kotlin Multiplatform shared module for MatchdayQuiz app."
-        homepage = "https://github.com/ovicristurean/the-matchday-quiz"
-        name = "shared"
-        ios.deploymentTarget = "14.1"
-        podfile = project.file("../theMatchdayQuizIos/Podfile")
-
-        framework {
-            baseName = "shared"
-            isStatic = true
-            transitiveExport = false
-            embedBitcode(org.jetbrains.kotlin.gradle.plugin.mpp.Framework.BitcodeEmbeddingMode.BITCODE)
-        }
-
-        xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.DEBUG
-        xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.RELEASE
-    }*/
-
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -79,10 +60,9 @@ kotlin {
                 implementation(project(":widgets"))
                 implementation(project(":splash"))
 
-                //gitlive
-                //implementation(libs.firebase.firestore)
-                //implementation(libs.firebase.common)
                 implementation(libs.kotlinx.serialization.json)
+
+                //gitlive
                 implementation(libs.gitlive.firebase.auth)
 
                 //koin
@@ -136,4 +116,13 @@ dependencies {
     commonMainApi(libs.moko.mvvm.compose)
     commonMainApi(libs.moko.mvvm.flow)
     commonMainApi(libs.moko.mvvm.flow.compose)
+}
+
+multiplatformSwiftPackage {
+    packageName("theMatchdayQuizIos")
+    swiftToolsVersion("5.9")
+    targetPlatforms {
+        iOS { v("14") }
+        macOS { v("12")}
+    }
 }
