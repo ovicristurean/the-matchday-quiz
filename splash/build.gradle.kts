@@ -6,7 +6,7 @@ plugins {
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default()
+    //targetHierarchy.default()
 
     android {
         compilations.all {
@@ -23,6 +23,12 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "splash"
+        }
+    }
+
+    targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java).all {
+        binaries.withType(org.jetbrains.kotlin.gradle.plugin.mpp.Framework::class.java).all {
+            export(libs.moko.mvvm.core)
         }
     }
 

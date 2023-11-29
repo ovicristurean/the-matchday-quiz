@@ -21,13 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import com.ovidiucristurean.thematchdayquiz.data.UserRepository
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.AvailableQuizView
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.PastQuizzesView
-import dev.gitlive.firebase.Firebase
-import dev.gitlive.firebase.FirebaseApp
-import dev.gitlive.firebase.firestore.FirebaseFirestore
-import dev.gitlive.firebase.firestore.firestore
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 

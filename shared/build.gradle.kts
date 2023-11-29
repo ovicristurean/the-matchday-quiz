@@ -3,7 +3,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.compose")
     kotlin("plugin.serialization") version "1.8.20"
-    alias(libs.plugins.cocoapods)
+    //alias(libs.plugins.cocoapods)
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -16,9 +16,17 @@ kotlin {
             }
         }
     }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "shared"
+            isStatic = true
+        }
+    }
 
     targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java).all {
         binaries.withType(org.jetbrains.kotlin.gradle.plugin.mpp.Framework::class.java).all {
@@ -26,7 +34,7 @@ kotlin {
         }
     }
 
-    cocoapods {
+    /*cocoapods {
         version = "1.0"
         summary = "Kotlin Multiplatform shared module for MatchdayQuiz app."
         homepage = "https://github.com/ovicristurean/the-matchday-quiz"
@@ -43,7 +51,7 @@ kotlin {
 
         xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.DEBUG
         xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType.RELEASE
-    }
+    }*/
 
     sourceSets {
         val commonMain by getting {
@@ -72,8 +80,8 @@ kotlin {
                 implementation(project(":splash"))
 
                 //gitlive
-                implementation(libs.firebase.firestore)
-                implementation(libs.firebase.common)
+                //implementation(libs.firebase.firestore)
+                //implementation(libs.firebase.common)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.gitlive.firebase.auth)
 
