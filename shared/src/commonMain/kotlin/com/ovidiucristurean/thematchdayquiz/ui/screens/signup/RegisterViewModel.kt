@@ -1,40 +1,45 @@
 package com.ovidiucristurean.thematchdayquiz.ui.screens.signup
 
-import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthResult
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.RegisterWithEmailAndPasswordUseCase
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.ShowErrorMessageUseCase
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
     private val registerWithEmailAndPasswordUseCase: RegisterWithEmailAndPasswordUseCase,
     private val showErrorMessageUseCase: ShowErrorMessageUseCase
-) : StateScreenModel<LoginResult>(LoginResult.IDLE) {
+) : ScreenModel {
+
+    private val authResultUiStateChannel = Channel<Unit>()
+    val authResultEvent = authResultUiStateChannel.receiveAsFlow()
 
     fun register(email: String, password: String) {
         coroutineScope.launch {
             registerWithEmailAndPasswordUseCase.invoke(email, password).onEach {
-                mutableState.value = when (it) {
+                when (it) {
                     is AuthResult.Success -> {
-                        LoginResult.LOGGED
+                        authResultUiStateChannel.trySend(Unit)
                     }
 
                     is AuthResult.Failure -> {
-                        LoginResult.NOT_LOGGED
+                        showErrorMessage(it.error)
                     }
 
                     is AuthResult.Dismissed -> {
-                        LoginResult.NOT_LOGGED
+                        showErrorMessage(it.error ?: "")
                     }
                 }
             }.stateIn(this)
         }
     }
 
-    fun showErrorMessage(message: String) {
+    private fun showErrorMessage(message: String) {
         showErrorMessageUseCase.showErrorMessage(message)
     }
 }

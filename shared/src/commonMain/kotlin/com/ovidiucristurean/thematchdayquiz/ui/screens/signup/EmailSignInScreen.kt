@@ -12,10 +12,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +28,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.ovidiucristurean.thematchdayquiz.ui.navigation.MainScreen
 import com.ovidiucristurean.widgets.button.MatchdayButton
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -39,21 +40,9 @@ class EmailSignInScreen : Screen, KoinComponent {
         val viewModel: SignInViewModel by inject()
         val navigator = LocalNavigator.currentOrThrow
 
-        LaunchedEffect(viewModel.authState) {
-            viewModel.authState.collect { authenticationState ->
-                when (authenticationState) {
-                    LoginResult.LOGGED -> {
-                        navigator.push(MainScreen())
-                    }
-
-                    LoginResult.IDLE -> {
-                        //do nothing for now
-                    }
-
-                    LoginResult.NOT_LOGGED -> {
-                        //do nothing for now
-                    }
-                }
+        rememberCoroutineScope().launch {
+            viewModel.userSignedInEvent.collect {
+                navigator.push(MainScreen())
             }
         }
 

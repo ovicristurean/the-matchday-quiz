@@ -19,7 +19,7 @@ val commonModule = module {
     single<UserDataSource> { UserRepository(get()) }
     factory { GetAuthenticationStateUseCase(get()) }
     factory { LoginWithEmailAndPasswordUseCase(get()) }
-    viewModelDefinition { SignInViewModel(get()) }
+    viewModelDefinition { SignInViewModel(get(), get()) }
 
     factory { RegisterWithEmailAndPasswordUseCase(get()) }
     factory { RegisterViewModel(get(), get()) }

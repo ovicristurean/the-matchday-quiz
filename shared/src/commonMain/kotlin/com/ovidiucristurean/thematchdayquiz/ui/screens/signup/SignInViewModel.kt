@@ -2,44 +2,44 @@ package com.ovidiucristurean.thematchdayquiz.ui.screens.signup
 
 import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthResult
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.LoginWithEmailAndPasswordUseCase
+import com.ovidiucristurean.thematchdayquiz.domain.usecase.ShowErrorMessageUseCase
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SignInViewModel(
-    private val loginWithEmailAndPasswordUseCase: LoginWithEmailAndPasswordUseCase
+    private val loginWithEmailAndPasswordUseCase: LoginWithEmailAndPasswordUseCase,
+    private val showErrorMessageUseCase: ShowErrorMessageUseCase
 ) : ViewModel() {
 
-    var authState = MutableStateFlow(LoginResult.IDLE)
-        private set
+    private val authResultUiStateChannel = Channel<Unit>()
+    val userSignedInEvent = authResultUiStateChannel.receiveAsFlow()
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
             loginWithEmailAndPasswordUseCase.invoke(username, password).onEach {
-                authState.value = when (it) {
+                when (it) {
                     is AuthResult.Success -> {
-                        LoginResult.LOGGED
+                        authResultUiStateChannel.trySend(Unit)
                     }
 
                     is AuthResult.Failure -> {
-                        LoginResult.NOT_LOGGED
+                        showErrorMessage(it.error)
                     }
 
                     is AuthResult.Dismissed -> {
-                        LoginResult.NOT_LOGGED
+                        showErrorMessage(it.error ?: "")
                     }
                 }
             }.stateIn(this)
         }
     }
 
-}
+    private fun showErrorMessage(message: String) {
+        showErrorMessageUseCase.showErrorMessage(message)
+    }
 
-enum class LoginResult {
-    IDLE,
-    NOT_LOGGED,
-    LOGGED
 }
-

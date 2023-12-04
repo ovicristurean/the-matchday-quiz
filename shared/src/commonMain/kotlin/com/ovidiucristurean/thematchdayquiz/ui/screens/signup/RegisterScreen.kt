@@ -26,10 +26,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -56,6 +56,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.ovidiucristurean.thematchdayquiz.ui.navigation.MainScreen
 import com.ovidiucristurean.widgets.button.MatchdayButton
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
@@ -77,19 +78,10 @@ class RegisterScreen : Screen, KoinComponent {
             mutableStateOf("")
         }
 
-        val authState by viewModel.state.collectAsState()
-
-        when (authState) {
-            LoginResult.LOGGED -> {
+        rememberCoroutineScope().launch {
+            viewModel.authResultEvent.collect {
+                println("OVI: collect a log in event")
                 navigator.push(MainScreen())
-            }
-
-            LoginResult.NOT_LOGGED -> {
-                viewModel.showErrorMessage("Error while attempting login")
-            }
-
-            LoginResult.IDLE -> {
-                viewModel.showErrorMessage("App idle")
             }
         }
 
