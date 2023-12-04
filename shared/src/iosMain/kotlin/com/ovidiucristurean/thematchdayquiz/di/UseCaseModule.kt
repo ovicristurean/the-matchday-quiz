@@ -4,7 +4,6 @@ import com.ovidiucristurean.thematchdayquiz.domain.usecase.ShowErrorMessageUseCa
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-actual fun createUseCaseModule(): Module =
-    module {
-        single { ShowErrorMessageUseCase(get()) }
-    }
+actual fun createUseCaseModule(): Module = module {
+    single { ShowErrorMessageUseCase() }
+}

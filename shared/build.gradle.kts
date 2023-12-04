@@ -52,6 +52,7 @@ kotlin {
                 //navigation
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.tab.navigator)
+                implementation(libs.voyager.koin)
 
                 //image loading
                 api(libs.image.loader)

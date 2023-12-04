@@ -26,7 +26,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,20 +49,23 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.ovidiucristurean.thematchdayquiz.ui.navigation.MainScreen
 import com.ovidiucristurean.widgets.button.MatchdayButton
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import org.koin.core.parameter.ParametersDefinition
+import org.koin.core.qualifier.Qualifier
 
 class RegisterScreen : Screen, KoinComponent {
 
     @OptIn(ExperimentalComposeUiApi::class)
     @Composable
     override fun Content() {
-        val viewModel: RegisterViewModel by inject()
+        val viewModel = getScreenModel<RegisterViewModel>()
         val keyboardController = LocalSoftwareKeyboardController.current
         val navigator = LocalNavigator.currentOrThrow
 
@@ -74,21 +77,19 @@ class RegisterScreen : Screen, KoinComponent {
             mutableStateOf("")
         }
 
-        LaunchedEffect(viewModel.authState) {
-            viewModel.authState.collect {
-                when (it) {
-                    LoginResult.LOGGED -> {
-                        navigator.push(MainScreen())
-                    }
+        val authState by viewModel.state.collectAsState()
 
-                    LoginResult.NOT_LOGGED -> {
-                        viewModel.showErrorMessage("Error while attempting login")
-                    }
+        when (authState) {
+            LoginResult.LOGGED -> {
+                navigator.push(MainScreen())
+            }
 
-                    LoginResult.IDLE -> {
-                        viewModel.showErrorMessage("App idle")
-                    }
-                }
+            LoginResult.NOT_LOGGED -> {
+                viewModel.showErrorMessage("Error while attempting login")
+            }
+
+            LoginResult.IDLE -> {
+                viewModel.showErrorMessage("App idle")
             }
         }
 
@@ -323,5 +324,14 @@ class RegisterScreen : Screen, KoinComponent {
             },
             modifier = modifier
         )
+    }
+
+    @Composable
+    inline fun <reified T : ScreenModel> Screen.getScreenModel(
+        qualifier: Qualifier? = null,
+        noinline parameters: ParametersDefinition? = null
+    ): T {
+        val koin = getKoin()
+        return rememberScreenModel(tag = qualifier?.value) { koin.get(qualifier, parameters) }
     }
 }

@@ -1,26 +1,22 @@
 package com.ovidiucristurean.thematchdayquiz.ui.screens.signup
 
+import cafe.adriel.voyager.core.model.StateScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
 import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthResult
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.RegisterWithEmailAndPasswordUseCase
-import com.ovidiucristurean.thematchdayquiz.domain.usecase.ShowErrorMessageUseCase
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
     private val registerWithEmailAndPasswordUseCase: RegisterWithEmailAndPasswordUseCase,
-    private val showErrorMessageUseCase: ShowErrorMessageUseCase
-) : ViewModel() {
-
-    var authState = MutableStateFlow(LoginResult.IDLE)
-        private set
+    //private val showErrorMessageUseCase: ShowErrorMessageUseCase
+) : StateScreenModel<LoginResult>(LoginResult.IDLE) {
 
     fun register(email: String, password: String) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             registerWithEmailAndPasswordUseCase.invoke(email, password).onEach {
-                authState.value = when (it) {
+                 mutableState.value = when (it) {
                     is AuthResult.Success -> {
                         LoginResult.LOGGED
                     }
@@ -38,6 +34,11 @@ class RegisterViewModel(
     }
 
     fun showErrorMessage(message: String) {
-        showErrorMessageUseCase.showErrorMessage(message)
+        //TODO fix DI for iOS
+        //showErrorMessageUseCase.showErrorMessage(message)
     }
+}
+
+enum class NavigationEvent {
+    TO_HOME_SCREEN
 }
