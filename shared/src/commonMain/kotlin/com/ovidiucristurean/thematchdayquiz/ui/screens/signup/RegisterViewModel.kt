@@ -4,19 +4,20 @@ import cafe.adriel.voyager.core.model.StateScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
 import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthResult
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.RegisterWithEmailAndPasswordUseCase
+import com.ovidiucristurean.thematchdayquiz.domain.usecase.ShowErrorMessageUseCase
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
     private val registerWithEmailAndPasswordUseCase: RegisterWithEmailAndPasswordUseCase,
-    //private val showErrorMessageUseCase: ShowErrorMessageUseCase
+    private val showErrorMessageUseCase: ShowErrorMessageUseCase
 ) : StateScreenModel<LoginResult>(LoginResult.IDLE) {
 
     fun register(email: String, password: String) {
         coroutineScope.launch {
             registerWithEmailAndPasswordUseCase.invoke(email, password).onEach {
-                 mutableState.value = when (it) {
+                mutableState.value = when (it) {
                     is AuthResult.Success -> {
                         LoginResult.LOGGED
                     }
@@ -34,11 +35,6 @@ class RegisterViewModel(
     }
 
     fun showErrorMessage(message: String) {
-        //TODO fix DI for iOS
-        //showErrorMessageUseCase.showErrorMessage(message)
+        showErrorMessageUseCase.showErrorMessage(message)
     }
-}
-
-enum class NavigationEvent {
-    TO_HOME_SCREEN
 }

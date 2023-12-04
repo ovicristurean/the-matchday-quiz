@@ -22,7 +22,7 @@ val commonModule = module {
     viewModelDefinition { SignInViewModel(get()) }
 
     factory { RegisterWithEmailAndPasswordUseCase(get()) }
-    factory { RegisterViewModel(get()) }
+    factory { RegisterViewModel(get(), get()) }
 
     factory { LogoutUseCase(get()) }
 

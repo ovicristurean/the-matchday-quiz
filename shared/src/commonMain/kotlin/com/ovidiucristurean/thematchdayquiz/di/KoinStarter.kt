@@ -5,6 +5,6 @@ import org.koin.core.context.startKoin
 
 fun initKoin() {
     startKoin {
-        modules(createAuthenticationModule() + commonModule)
+        modules(createAuthenticationModule() + commonModule + createUseCaseModule())
     }
 }
