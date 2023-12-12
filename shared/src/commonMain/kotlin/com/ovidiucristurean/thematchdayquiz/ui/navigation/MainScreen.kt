@@ -12,10 +12,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
-import com.ovidiucristurean.quiz.presentation.QuizScreen
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.HomeScreenBottomBar
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.HomeScreenTopBar
 import com.ovidiucristurean.thematchdayquiz.ui.screens.profile.UserProfileScreen
+import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.QuizScreen
 
 class MainScreen : Screen {
 

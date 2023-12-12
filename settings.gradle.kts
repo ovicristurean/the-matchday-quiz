@@ -34,6 +34,3 @@ dependencyResolutionManagement {
 rootProject.name = "TheMatchdayQuiz"
 include(":theMatchdayQuizAndroid")
 include(":shared")
-include(":quiz")
-include(":widgets")
-include(":splash")

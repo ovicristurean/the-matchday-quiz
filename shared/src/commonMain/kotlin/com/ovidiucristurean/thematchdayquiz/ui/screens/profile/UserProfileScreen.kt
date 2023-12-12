@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
-import com.ovidiucristurean.widgets.button.MatchdayButton
+import com.ovidiucristurean.thematchdayquiz.ui.widget.button.MatchdayButton
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

@@ -1,7 +1,7 @@
-package com.ovidiucristurean.quiz.presentation
+package com.ovidiucristurean.thematchdayquiz.ui.screens.quiz
 
-import com.ovidiucristurean.quiz.domain.model.QuizAnswer
-import com.ovidiucristurean.quiz.domain.model.QuizModel
+import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuizAnswer
+import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuizModel
 
 
 sealed interface QuizScreenUiState {

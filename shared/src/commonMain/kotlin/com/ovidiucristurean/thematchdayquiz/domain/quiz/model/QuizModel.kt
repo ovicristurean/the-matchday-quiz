@@ -1,4 +1,4 @@
-package com.ovidiucristurean.quiz.domain.model
+package com.ovidiucristurean.thematchdayquiz.domain.quiz.model
 
 data class QuizModel(
     val imageUrl: String? = null,

@@ -27,7 +27,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.ovidiucristurean.thematchdayquiz.ui.navigation.MainScreen
-import com.ovidiucristurean.widgets.button.MatchdayButton
+import com.ovidiucristurean.thematchdayquiz.ui.widget.button.MatchdayButton
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

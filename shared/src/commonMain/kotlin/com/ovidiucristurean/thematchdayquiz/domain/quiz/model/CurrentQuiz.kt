@@ -1,4 +1,4 @@
-package com.ovidiucristurean.quiz.domain.model
+package com.ovidiucristurean.thematchdayquiz.domain.quiz.model
 
 sealed class CurrentQuiz {
 

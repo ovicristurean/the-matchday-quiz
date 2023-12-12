@@ -55,7 +55,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.ovidiucristurean.thematchdayquiz.ui.navigation.MainScreen
-import com.ovidiucristurean.widgets.button.MatchdayButton
+import com.ovidiucristurean.thematchdayquiz.ui.widget.button.MatchdayButton
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.ParametersDefinition
@@ -80,7 +80,6 @@ class RegisterScreen : Screen, KoinComponent {
 
         rememberCoroutineScope().launch {
             viewModel.authResultEvent.collect {
-                println("OVI: collect a log in event")
                 navigator.push(MainScreen())
             }
         }
@@ -270,7 +269,7 @@ class RegisterScreen : Screen, KoinComponent {
             keyboardActions = keyboardActions,
             shape = MaterialTheme.shapes.medium,
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                textColor = MaterialTheme.colorScheme.onPrimary,
+                //textColor = MaterialTheme.colorScheme.onPrimary,
                 cursorColor = MaterialTheme.colorScheme.onPrimary,
                 focusedBorderColor = MaterialTheme.colorScheme.secondary,
                 unfocusedBorderColor = Color.LightGray.copy(alpha = if (isSystemInDarkTheme()) 0.4f else 1f)

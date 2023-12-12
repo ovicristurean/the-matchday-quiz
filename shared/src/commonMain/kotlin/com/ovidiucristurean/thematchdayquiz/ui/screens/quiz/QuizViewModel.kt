@@ -1,8 +1,8 @@
-package com.ovidiucristurean.quiz.presentation
+package com.ovidiucristurean.thematchdayquiz.ui.screens.quiz
 
-import com.ovidiucristurean.quiz.domain.model.CurrentQuiz
-import com.ovidiucristurean.quiz.domain.model.QuizAnswer
-import com.ovidiucristurean.quiz.domain.repository.QuizRepository
+import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.CurrentQuiz
+import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuizAnswer
+import com.ovidiucristurean.thematchdayquiz.domain.quiz.repository.QuizRepository
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

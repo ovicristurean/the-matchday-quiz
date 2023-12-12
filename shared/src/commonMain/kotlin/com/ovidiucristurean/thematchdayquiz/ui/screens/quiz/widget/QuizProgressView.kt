@@ -1,4 +1,4 @@
-package com.ovidiucristurean.quiz.presentation.widget
+package com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.widget
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding

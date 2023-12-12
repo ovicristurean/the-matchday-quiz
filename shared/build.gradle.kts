@@ -6,16 +6,8 @@ plugins {
     id("io.github.luca992.multiplatform-swiftpackage") version "2.2.0"
 }
 
-@OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-
-    android {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "17"
-            }
-        }
-    }
+    androidTarget()
 
     listOf(
         iosX64(),
@@ -57,9 +49,9 @@ kotlin {
                 //image loading
                 api(libs.image.loader)
 
-                implementation(project(":quiz"))
-                implementation(project(":widgets"))
-                implementation(project(":splash"))
+                //implementation(project(":quiz"))
+                //implementation(project(":widgets"))
+                //implementation(project(":splash"))
 
                 implementation(libs.kotlinx.serialization.json)
 
@@ -68,6 +60,9 @@ kotlin {
 
                 //koin
                 api(libs.koin.core)
+
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
             }
         }
         val commonTest by getting {
@@ -100,7 +95,12 @@ kotlin {
 
 android {
     namespace = "com.ovidiucristurean.thematchdayquiz"
-    compileSdk = 33
+    compileSdk = (findProperty("android.compileSdk") as String).toInt()
+
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].res.srcDirs("src/androidMain/res")
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+
     defaultConfig {
         minSdk = 24
     }
@@ -112,7 +112,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.core)
-    implementation(project(mapOf("path" to ":quiz")))
+//    implementation(project(mapOf("path" to ":quiz")))
     commonMainApi(libs.moko.mvvm.core)
     commonMainApi(libs.moko.mvvm.compose)
     commonMainApi(libs.moko.mvvm.flow)
