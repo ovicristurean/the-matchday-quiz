@@ -16,14 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 
-class SignInScreen(
-    val onGoogleSignInClicked: () -> Unit,
-    val onRegisterClicked: () -> Unit,
-) : Screen {
+class SignInScreen : Screen {
 
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -33,7 +34,9 @@ class SignInScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-            )
+            ) {
+                navigator.push(EmailSignInScreen())
+            }
 
             Spacer(
                 modifier = Modifier.height(16.dp)
@@ -43,18 +46,21 @@ class SignInScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-            )
+            ) {
+                navigator.push(RegisterScreen())
+            }
         }
     }
 
     @Composable
     fun EmailLoginButton(
         modifier: Modifier = Modifier,
+        onLoginClicked: () -> Unit
     ) {
         Button(
             modifier = modifier,
             shape = MaterialTheme.shapes.medium,
-            onClick = onGoogleSignInClicked
+            onClick = onLoginClicked
         ) {
             Text(
                 text = "Sign in with e-mail",
@@ -66,6 +72,7 @@ class SignInScreen(
     @Composable
     fun RegisterButton(
         modifier: Modifier = Modifier,
+        onRegisterClicked: () -> Unit
     ) {
         Button(
             modifier = modifier,

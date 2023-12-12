@@ -1,9 +1,12 @@
 package com.ovidiucristurean.thematchdayquiz.ui.screens.splash
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,7 +28,6 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -34,9 +36,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 
-class SplashScreen(
-    private val path: String
-) : Screen {
+class SplashScreen : Screen {
 
     @OptIn(ExperimentalResourceApi::class)
     @Composable
@@ -56,12 +56,20 @@ class SplashScreen(
                 animationStarted = true
             }
 
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = painterResource("compose-multiplatform.xml"),
-                contentDescription = "Compose Multiplatform icon",
-                contentScale = ContentScale.Crop
-            )
+            AnimatedVisibility(
+                visible = animationStarted,
+                enter = fadeIn(
+                    animationSpec = tween(2000),
+                    initialAlpha = 0.2f
+                )
+            ) {
+                Image(
+                    modifier = Modifier.fillMaxSize(),
+                    painter = painterResource("endless-constellation.png"),
+                    contentDescription = "Compose Multiplatform icon",
+                    contentScale = ContentScale.Crop
+                )
+            }
 
             Column(
                 modifier = Modifier,
@@ -87,10 +95,6 @@ class SplashScreen(
                     color = MaterialTheme.colorScheme.tertiary,
                     animationStarted = animationStarted,
                     initialTranslationOffset = -3000f
-                )
-
-                Text(
-                    text = path
                 )
             }
         }
@@ -132,23 +136,35 @@ private fun TitleText(
         }
     }
 
+    val alphaAnimation by transition.animateFloat(
+        transitionSpec = {
+            tween(
+                durationMillis = 4000,
+                easing = LinearEasing
+            )
+        },
+        label = ""
+    ) {
+        when (it) {
+            true -> 1f
+            false -> 0f
+        }
+    }
+
     Text(
         modifier = Modifier
-            //.scale(scaleAnimation)
             .graphicsLayer {
                 translationX = translationAnimation
                 scaleX = scaleAnimation
                 scaleY = scaleAnimation
+                alpha = alphaAnimation
             },
-        //.rotate(rotationAnimation),
         text = text,
         textAlign = TextAlign.Center,
         color = color,
         style = LocalTextStyle.current.merge(
             TextStyle(
-                color = color,
                 fontSize = 80.sp,
-                drawStyle = Stroke(width = 6f, join = StrokeJoin.Round)
             )
         )
     )

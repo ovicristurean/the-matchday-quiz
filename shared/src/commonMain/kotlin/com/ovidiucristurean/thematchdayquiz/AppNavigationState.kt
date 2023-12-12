@@ -6,11 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-//import com.barabasizsolt.mova.auth.api.AuthenticationState
-//import com.barabasizsolt.mova.domain.usecase.auth.IsLoggedInUseCase
 import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthenticationState
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.GetAuthenticationStateUseCase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -18,10 +17,19 @@ import org.koin.core.component.inject
 @Composable
 internal fun rememberAppNavigationState(
     scope: CoroutineScope = rememberCoroutineScope(),
-): AppNavigationState = remember { AppNavigationState(scope = scope) }
+    stateObservationDelay: Long = 0,
+): AppNavigationState = remember {
+    AppNavigationState(
+        scope = scope,
+        stateObservationDelay = stateObservationDelay
+    )
+}
 
 
-internal class AppNavigationState(scope: CoroutineScope) : KoinComponent {
+internal class AppNavigationState(
+    scope: CoroutineScope,
+    stateObservationDelay: Long
+) : KoinComponent {
 
     private val getAuthenticationStateUseCase by inject<GetAuthenticationStateUseCase>()
     var authState by mutableStateOf<AuthenticationState?>(value = null)
@@ -29,6 +37,7 @@ internal class AppNavigationState(scope: CoroutineScope) : KoinComponent {
 
     init {
         scope.launch {
+            delay(stateObservationDelay)
             getAuthenticationStateUseCase().collect {
                 authState = it
             }

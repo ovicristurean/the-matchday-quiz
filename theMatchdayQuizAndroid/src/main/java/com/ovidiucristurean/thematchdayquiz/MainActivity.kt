@@ -24,7 +24,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             App(
                 darkTheme = isSystemInDarkTheme(),
-                resourcePath = "nothing"
             )
         }
     }
@@ -46,6 +45,5 @@ class MainActivity : ComponentActivity() {
 fun DefaultPreview() {
     App(
         darkTheme = isSystemInDarkTheme(),
-        resourcePath = "resourcePath"
     )
 }

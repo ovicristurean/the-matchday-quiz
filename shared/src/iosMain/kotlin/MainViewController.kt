@@ -8,7 +8,6 @@ fun MainViewController() = ComposeUIViewController {
     val isDarkTheme =
         UIScreen.mainScreen.traitCollection.userInterfaceStyle() == UIUserInterfaceStyle.UIUserInterfaceStyleDark
     App(
-        darkTheme = isDarkTheme,
-        resourcePath = NSBundle.mainBundle.resourcePath.toString()
+        darkTheme = isDarkTheme
     )
 }
