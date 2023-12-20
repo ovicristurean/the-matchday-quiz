@@ -20,6 +20,7 @@ pluginManagement {
 
         id("org.jetbrains.compose").version(composeVersion)
         id("io.github.luca992.multiplatform-swiftpackage") version "2.2.0"
+        kotlin("plugin.serialization") version kotlinVersion
     }
 }
 

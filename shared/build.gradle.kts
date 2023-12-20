@@ -2,7 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("org.jetbrains.compose")
-    kotlin("plugin.serialization") version "1.8.20"
+    kotlin("plugin.serialization")
     id("io.github.luca992.multiplatform-swiftpackage") version "2.2.0"
 }
 
@@ -49,14 +49,11 @@ kotlin {
                 //image loading
                 api(libs.image.loader)
 
-                //implementation(project(":quiz"))
-                //implementation(project(":widgets"))
-                //implementation(project(":splash"))
-
                 implementation(libs.kotlinx.serialization.json)
 
                 //gitlive
                 implementation(libs.gitlive.firebase.auth)
+                implementation(libs.firebase.firestore)
 
                 //koin
                 api(libs.koin.core)

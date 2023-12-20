@@ -1,6 +1,7 @@
 package com.ovidiucristurean.thematchdayquiz.ui.screens.home.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun PastQuizzesView(
     modifier: Modifier,
+    onQuizClicked: () -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -35,6 +37,9 @@ fun PastQuizzesView(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
+                    modifier = Modifier.clickable {
+                        onQuizClicked()
+                    },
                     text = "Past quiz $it",
                     color = MaterialTheme.colorScheme.onBackground
                 )

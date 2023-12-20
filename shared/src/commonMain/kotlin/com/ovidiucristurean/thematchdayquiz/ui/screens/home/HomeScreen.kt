@@ -21,17 +21,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.AvailableQuizView
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.PastQuizzesView
+import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.QuizScreen
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
 
-class HomeScreen(
-    val onQuizOpenRequested: () -> Unit,
-) : Screen {
+class HomeScreen : Screen {
 
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
         val viewModel = getViewModel(
             key = "home-screen",
             factory = viewModelFactory {
@@ -53,7 +55,7 @@ class HomeScreen(
                     .padding(all = 16.dp),
                 currentQuizState = state.currentQuiz,
                 onClick = {
-                    onQuizOpenRequested()
+                    navigator.push(QuizScreen())
                 }
             )
 
@@ -72,7 +74,10 @@ class HomeScreen(
             )
 
             PastQuizzesView(
-                modifier = Modifier.fillMaxSize().padding(vertical = 16.dp)
+                modifier = Modifier.fillMaxSize().padding(vertical = 16.dp),
+                onQuizClicked = {
+                    //TODO implement screen to view past quiz results
+                }
             )
         }
     }

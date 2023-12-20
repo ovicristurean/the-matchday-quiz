@@ -6,6 +6,7 @@ import com.ovidiucristurean.thematchdayquiz.domain.usecase.GetAuthenticationStat
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.LoginWithEmailAndPasswordUseCase
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.LogoutUseCase
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.RegisterWithEmailAndPasswordUseCase
+import com.ovidiucristurean.thematchdayquiz.ui.screens.developersettings.DeveloperSettingsViewModel
 import com.ovidiucristurean.thematchdayquiz.ui.screens.profile.UserProfileViewModel
 import com.ovidiucristurean.thematchdayquiz.ui.screens.signup.RegisterViewModel
 import com.ovidiucristurean.thematchdayquiz.ui.screens.signup.SignInViewModel
@@ -27,4 +28,6 @@ val commonModule = module {
     factory { LogoutUseCase(get()) }
 
     viewModelDefinition { UserProfileViewModel(get()) }
+
+    factory { DeveloperSettingsViewModel() }
 }

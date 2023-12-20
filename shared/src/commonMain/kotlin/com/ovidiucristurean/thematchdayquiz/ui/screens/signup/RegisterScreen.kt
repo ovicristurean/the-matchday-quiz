@@ -55,6 +55,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.ovidiucristurean.thematchdayquiz.ui.navigation.MainScreen
+import com.ovidiucristurean.thematchdayquiz.ui.screens.getScreenModel
 import com.ovidiucristurean.thematchdayquiz.ui.widget.button.MatchdayButton
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -269,7 +270,6 @@ class RegisterScreen : Screen, KoinComponent {
             keyboardActions = keyboardActions,
             shape = MaterialTheme.shapes.medium,
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                //textColor = MaterialTheme.colorScheme.onPrimary,
                 cursorColor = MaterialTheme.colorScheme.onPrimary,
                 focusedBorderColor = MaterialTheme.colorScheme.secondary,
                 unfocusedBorderColor = Color.LightGray.copy(alpha = if (isSystemInDarkTheme()) 0.4f else 1f)
@@ -315,14 +315,5 @@ class RegisterScreen : Screen, KoinComponent {
             },
             modifier = modifier
         )
-    }
-
-    @Composable
-    inline fun <reified T : ScreenModel> Screen.getScreenModel(
-        qualifier: Qualifier? = null,
-        noinline parameters: ParametersDefinition? = null
-    ): T {
-        val koin = getKoin()
-        return rememberScreenModel(tag = qualifier?.value) { koin.get(qualifier, parameters) }
     }
 }

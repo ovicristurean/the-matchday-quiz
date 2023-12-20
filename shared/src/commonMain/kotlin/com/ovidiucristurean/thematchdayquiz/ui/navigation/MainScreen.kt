@@ -3,7 +3,6 @@ package com.ovidiucristurean.thematchdayquiz.ui.navigation
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,23 +11,18 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.ovidiucristurean.thematchdayquiz.ui.screens.developersettings.DeveloperSettingsScreen
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.HomeScreenBottomBar
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.HomeScreenTopBar
 import com.ovidiucristurean.thematchdayquiz.ui.screens.profile.UserProfileScreen
-import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.QuizScreen
 
 class MainScreen : Screen {
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-        val homeTab = HomeTab(
-            onQuizOpenRequested = {
-                navigator.push(QuizScreen())
-            }
-        )
+        val homeTab = HomeTab()
 
         TabNavigator(homeTab) {
             Scaffold(
@@ -36,6 +30,9 @@ class MainScreen : Screen {
                     HomeScreenTopBar(
                         onUserProfileClicked = {
                             navigator.push(UserProfileScreen())
+                        },
+                        onDeveloperSettingsClicked = {
+                            navigator.push(DeveloperSettingsScreen())
                         }
                     )
                 },
