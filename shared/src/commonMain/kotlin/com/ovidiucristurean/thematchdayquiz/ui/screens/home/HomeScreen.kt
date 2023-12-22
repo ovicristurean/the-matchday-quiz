@@ -55,7 +55,7 @@ class HomeScreen : Screen {
                     .padding(all = 16.dp),
                 currentQuizState = state.currentQuiz,
                 onClick = {
-                    navigator.push(QuizScreen())
+                    navigator.parent?.parent?.push(QuizScreen())
                 }
             )
 
