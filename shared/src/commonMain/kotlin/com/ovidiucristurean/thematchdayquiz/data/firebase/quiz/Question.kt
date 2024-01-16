@@ -1,17 +1,17 @@
-package com.ovidiucristurean.thematchdayquiz.domain.quiz.model
+package com.ovidiucristurean.thematchdayquiz.data.firebase.quiz
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class QuizModel(
+data class Question(
     val imageUrl: String? = null,
     val question: String? = null,
-    val answers: List<QuizAnswer>? = null,
+    val answers: List<Answer>? = null,
     val timePerQuestion: Int? = null,
 )
 
 @Serializable
-data class QuizAnswer(
+data class Answer(
     val answer: String,
     val isCorrect: Boolean
 )

@@ -118,6 +118,21 @@ class DeveloperSettingsScreen : Screen {
                         }
                     }
                 }
+
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                viewModel.generateFirebaseQuiz()
+                            }
+                        ) {
+                            Text(text = "Upload quiz")
+                        }
+                    }
+                }
             }
         }
     }

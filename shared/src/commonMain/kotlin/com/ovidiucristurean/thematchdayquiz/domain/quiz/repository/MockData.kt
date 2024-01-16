@@ -2,12 +2,12 @@ package com.ovidiucristurean.thematchdayquiz.domain.quiz.repository
 
 import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.CurrentQuiz
 import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuizAnswer
-import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuizModel
+import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuestionModel
 
-val mockedAvailableQuizzes = CurrentQuiz.AvailableQuiz(mutableListOf<QuizModel>().apply {
+val mockedAvailableQuizzes = CurrentQuiz.AvailableQuiz(mutableListOf<QuestionModel>().apply {
     (1..12).forEach {
         add(
-            QuizModel(
+            QuestionModel(
                 imageUrl = "https://loremflickr.com/cache/resized/1712_25859505144_682b79f747_n_320_240_nofilter.jpg",
                 question = "question $it",
                 answers = listOf(

@@ -1,10 +1,12 @@
 package com.ovidiucristurean.thematchdayquiz.ui.screens.developersettings
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.ovidiucristurean.thematchdayquiz.data.datacreator.FirebaseQuizContentCreator
+import com.ovidiucristurean.thematchdayquiz.data.firebase.quiz.Answer
+import com.ovidiucristurean.thematchdayquiz.data.firebase.quiz.Question
+import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuestionModel
 import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuizAnswer
-import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuizModel
 import com.ovidiucristurean.thematchdayquiz.ui.screens.developersettings.state.QuestionUiState
 import kotlinx.coroutines.launch
 
@@ -43,9 +45,9 @@ class DeveloperSettingsViewModel : ScreenModel {
     }
 
     fun generateFirebaseQuestion() {
-        coroutineScope.launch {
-            FirebaseQuizContentCreator.generateData(
-                quizModel = QuizModel(
+        screenModelScope.launch {
+            FirebaseQuizContentCreator.generateQuestion(
+                questionModel = QuestionModel(
                     imageUrl = questionUiState.imageUrl,
                     question = questionUiState.question,
                     answers = questionUiState.answers.mapIndexed { index, answer ->
@@ -55,6 +57,26 @@ class DeveloperSettingsViewModel : ScreenModel {
                         )
                     },
                     timePerQuestion = questionUiState.timePerQuestion
+                )
+            )
+        }
+    }
+
+    fun generateFirebaseQuiz() {
+        screenModelScope.launch {
+            FirebaseQuizContentCreator.generateQuiz(
+                listOf(
+                    Question(
+                        imageUrl = questionUiState.imageUrl,
+                        question = questionUiState.question,
+                        answers = questionUiState.answers.mapIndexed { index, answer ->
+                            Answer(
+                                answer = answer,
+                                isCorrect = index == 2
+                            )
+                        },
+                        timePerQuestion = questionUiState.timePerQuestion
+                    )
                 )
             )
         }

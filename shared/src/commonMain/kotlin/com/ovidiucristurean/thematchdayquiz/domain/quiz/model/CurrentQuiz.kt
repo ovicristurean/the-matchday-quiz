@@ -9,6 +9,6 @@ sealed class CurrentQuiz {
     ) : CurrentQuiz()
 
     data class AvailableQuiz(
-        val questions: List<QuizModel>,
+        val questions: List<QuestionModel>,
     ) : CurrentQuiz()
 }

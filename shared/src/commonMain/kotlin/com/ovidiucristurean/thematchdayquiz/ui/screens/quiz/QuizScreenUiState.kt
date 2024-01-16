@@ -1,7 +1,7 @@
 package com.ovidiucristurean.thematchdayquiz.ui.screens.quiz
 
 import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuizAnswer
-import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuizModel
+import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuestionModel
 
 
 sealed interface QuizScreenUiState {
@@ -11,7 +11,7 @@ sealed interface QuizScreenUiState {
     data class QuizScreenInProgress(
         val numberOfQuestions: Int? = null,
         val currentQuestionNumber: Int? = null,
-        val currentQuestion: QuizModel? = null,
+        val currentQuestion: QuestionModel? = null,
         val timeLeftForQuestion: Int? = null,
         val selectedAnswer: QuizAnswer? = null,
         val totalScore: Int = 0
