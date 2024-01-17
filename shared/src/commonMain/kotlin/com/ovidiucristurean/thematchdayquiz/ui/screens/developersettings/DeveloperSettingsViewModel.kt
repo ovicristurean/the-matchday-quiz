@@ -5,79 +5,82 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.ovidiucristurean.thematchdayquiz.data.datacreator.FirebaseQuizContentCreator
 import com.ovidiucristurean.thematchdayquiz.data.firebase.quiz.Answer
 import com.ovidiucristurean.thematchdayquiz.data.firebase.quiz.Question
-import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuestionModel
-import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuizAnswer
 import com.ovidiucristurean.thematchdayquiz.ui.screens.developersettings.state.QuestionUiState
+import com.ovidiucristurean.thematchdayquiz.ui.screens.developersettings.state.QuizGeneratorUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DeveloperSettingsViewModel : ScreenModel {
 
-    private var questionUiState = QuestionUiState()
+    private var _quizUiState = MutableStateFlow(QuizGeneratorUiState())
+    val quizUiState = _quizUiState.asStateFlow()
 
     fun updateQuestionData(
+        quizQuestionIndex: Int,
         questionItemType: QuestionItemType,
         value: String,
-        index: Int
+        answerIndex: Int
     ) {
         when (questionItemType) {
             QuestionItemType.QUESTION -> {
-                questionUiState = questionUiState.copy(
-                    question = value
-                )
+                _quizUiState.update {
+                    it.questions[quizQuestionIndex].question = value
+                    it
+                }
             }
 
             QuestionItemType.ANSWER -> {
-                questionUiState.answers[index] = value
+                _quizUiState.update {
+                    it.questions[quizQuestionIndex].answers[answerIndex] = value
+                    it
+                }
             }
 
             QuestionItemType.IMAGE -> {
-                questionUiState = questionUiState.copy(
-                    imageUrl = value
-                )
+                _quizUiState.update {
+                    it.questions[quizQuestionIndex].imageUrl = value
+                    it
+                }
             }
 
             QuestionItemType.TIME -> {
-                questionUiState = questionUiState.copy(
-                    timePerQuestion = value.toIntOrNull() ?: 5
-                )
+                _quizUiState.update {
+                    it.questions[quizQuestionIndex].timePerQuestion =
+                        value.toIntOrNull() ?: 5
+                    it
+                }
             }
-        }
-    }
-
-    fun generateFirebaseQuestion() {
-        screenModelScope.launch {
-            FirebaseQuizContentCreator.generateQuestion(
-                questionModel = QuestionModel(
-                    imageUrl = questionUiState.imageUrl,
-                    question = questionUiState.question,
-                    answers = questionUiState.answers.mapIndexed { index, answer ->
-                        QuizAnswer(
-                            answer = answer,
-                            isCorrect = index == 2
-                        )
-                    },
-                    timePerQuestion = questionUiState.timePerQuestion
-                )
-            )
         }
     }
 
     fun generateFirebaseQuiz() {
         screenModelScope.launch {
             FirebaseQuizContentCreator.generateQuiz(
-                listOf(
+                _quizUiState.value.questions.map {
                     Question(
-                        imageUrl = questionUiState.imageUrl,
-                        question = questionUiState.question,
-                        answers = questionUiState.answers.mapIndexed { index, answer ->
+                        imageUrl = it.imageUrl,
+                        question = it.question,
+                        answers = it.answers.mapIndexed { index, answer ->
                             Answer(
                                 answer = answer,
                                 isCorrect = index == 2
                             )
                         },
-                        timePerQuestion = questionUiState.timePerQuestion
+                        timePerQuestion = it.timePerQuestion
                     )
-                )
+                }
+            )
+        }
+    }
+
+    fun addQuestionToQuiz() {
+        _quizUiState.update { currentQuizState ->
+            currentQuizState.copy(
+                questions = currentQuizState.questions.toMutableList().apply {
+                    add(QuestionUiState())
+                }
             )
         }
     }

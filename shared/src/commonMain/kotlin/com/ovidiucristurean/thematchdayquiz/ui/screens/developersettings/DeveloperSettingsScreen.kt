@@ -6,31 +6,44 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import com.ovidiucristurean.thematchdayquiz.ui.screens.getScreenModel
+import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.widget.QuizItem
 
 class DeveloperSettingsScreen : Screen {
 
     @Composable
     override fun Content() {
         val viewModel = getScreenModel<DeveloperSettingsViewModel>()
+        val quizUiState by viewModel.quizUiState.collectAsState()
 
-        Surface(
-            color = MaterialTheme.colorScheme.background
+        Scaffold(
+            contentColor = MaterialTheme.colorScheme.background,
+            floatingActionButton = {
+                FloatingActionButton(
+                    shape = RoundedCornerShape(100.dp),
+                    onClick = {
+                        viewModel.addQuestionToQuiz()
+                    }) {
+                    Text(
+                        modifier = Modifier.padding(4.dp),
+                        text = "Add"
+                    )
+                }
+            }
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -51,72 +64,17 @@ class DeveloperSettingsScreen : Screen {
                     }
                 }
 
-                item {
-                    QuestionItemField(
-                        itemTitle = "Question:",
-                        onValueChanged = { value, index ->
+                items(quizUiState.questions.size) {
+                    QuizItem(
+                        onQuizItemChanged = { questionItemType, value, index ->
                             viewModel.updateQuestionData(
-                                QuestionItemType.QUESTION,
-                                value,
-                                index
+                                quizQuestionIndex = it,
+                                questionItemType = questionItemType,
+                                value = value,
+                                answerIndex = index
                             )
                         }
                     )
-                }
-
-                item {
-                    QuestionItemField(
-                        itemTitle = "Image URL:",
-                        onValueChanged = { value, index ->
-                            viewModel.updateQuestionData(
-                                QuestionItemType.IMAGE,
-                                value,
-                                index
-                            )
-                        }
-                    )
-                }
-
-                item {
-                    QuestionItemField(
-                        itemTitle = "Answers:",
-                        numberOfValues = 4,
-                        onValueChanged = { value, index ->
-                            viewModel.updateQuestionData(
-                                QuestionItemType.ANSWER,
-                                value,
-                                index
-                            )
-                        }
-                    )
-                }
-
-                item {
-                    QuestionItemField(
-                        itemTitle = "Time per question (seconds):",
-                        onValueChanged = { value, index ->
-                            viewModel.updateQuestionData(
-                                QuestionItemType.TIME,
-                                value,
-                                index
-                            )
-                        }
-                    )
-                }
-
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Button(
-                            onClick = {
-                                viewModel.generateFirebaseQuestion()
-                            }
-                        ) {
-                            Text(text = "Upload question")
-                        }
-                    }
                 }
 
                 item {
@@ -129,55 +87,13 @@ class DeveloperSettingsScreen : Screen {
                                 viewModel.generateFirebaseQuiz()
                             }
                         ) {
-                            Text(text = "Upload quiz")
+                            Text(text = "Upload ${quizUiState.questions.size} questions to quiz")
                         }
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-private fun QuestionItemField(
-    itemTitle: String,
-    numberOfValues: Int = 1,
-    onValueChanged: (String, Int) -> Unit
-) {
-    Text(
-        text = itemTitle,
-        style = TextStyle(
-            color = MaterialTheme.colorScheme.onBackground
-        )
-    )
-
-    for (i in 0 until numberOfValues) {
-        AnswerTextField(
-            answerIndex = i,
-            onValueChanged = onValueChanged
-        )
-    }
-}
-
-@Composable
-private fun AnswerTextField(
-    answerIndex: Int,
-    onValueChanged: (String, Int) -> Unit
-) {
-    var questionValue by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    TextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = if (answerIndex > 0) 10.dp else 0.dp),
-        value = questionValue,
-        onValueChange = { newValue ->
-            questionValue = newValue
-            onValueChanged(newValue, answerIndex)
-        }
-    )
 }
 
 enum class QuestionItemType {
