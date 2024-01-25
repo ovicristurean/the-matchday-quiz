@@ -2,7 +2,8 @@ package com.ovidiucristurean.thematchdayquiz.ui.screens.signup
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthResult
+import cafe.adriel.voyager.core.model.screenModelScope
+import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthenticationResult
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.RegisterWithEmailAndPasswordUseCase
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.ShowErrorMessageUseCase
 import kotlinx.coroutines.channels.Channel
@@ -20,18 +21,18 @@ class RegisterViewModel(
     val authResultEvent = authResultUiStateChannel.receiveAsFlow()
 
     fun register(email: String, password: String) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             registerWithEmailAndPasswordUseCase.invoke(email, password).onEach {
                 when (it) {
-                    is AuthResult.Success -> {
+                    is AuthenticationResult.Success -> {
                         authResultUiStateChannel.trySend(Unit)
                     }
 
-                    is AuthResult.Failure -> {
+                    is AuthenticationResult.Failure -> {
                         showErrorMessage(it.error)
                     }
 
-                    is AuthResult.Dismissed -> {
+                    is AuthenticationResult.Dismissed -> {
                         showErrorMessage(it.error ?: "")
                     }
                 }

@@ -12,9 +12,9 @@ interface AuthenticationService {
 
     val authenticationState: Flow<AuthenticationState>
 
-    fun loginWithEmailAndPassword(email: String, password: String): Flow<AuthResult>
+    fun loginWithEmailAndPassword(email: String, password: String): Flow<AuthenticationResult>
 
-    fun registerWithEmailAndPassWord(email: String, password: String): Flow<AuthResult>
+    fun registerWithEmailAndPassWord(email: String, password: String): Flow<AuthenticationResult>
 
     suspend fun logOut()
 

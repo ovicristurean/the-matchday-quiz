@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthResult
+import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthenticationResult
 import com.ovidiucristurean.thematchdayquiz.domain.auth.GetIntentForGoogleAccountLoginUseCase
 import com.ovidiucristurean.thematchdayquiz.domain.auth.LoginWithGoogleAccountUseCase
 import kotlinx.coroutines.flow.onEach
@@ -26,8 +26,8 @@ class AuthScreenState(
         coroutineScope.launch {
             loginWithGoogleAccountUseCase(intent = intent).onEach { result ->
                 state = when (result) {
-                    is AuthResult.Failure -> State.Error(message = result.error)
-                    is AuthResult.Success, is AuthResult.Dismissed -> State.Normal
+                    is AuthenticationResult.Failure -> State.Error(message = result.error)
+                    is AuthenticationResult.Success, is AuthenticationResult.Dismissed -> State.Normal
                 }
             }.stateIn(scope = this)
         }

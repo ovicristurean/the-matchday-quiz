@@ -1,6 +1,6 @@
 package com.ovidiucristurean.thematchdayquiz.ui.screens.signup
 
-import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthResult
+import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthenticationResult
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.LoginWithEmailAndPasswordUseCase
 import com.ovidiucristurean.thematchdayquiz.domain.usecase.ShowErrorMessageUseCase
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
@@ -22,15 +22,15 @@ class SignInViewModel(
         viewModelScope.launch {
             loginWithEmailAndPasswordUseCase.invoke(username, password).onEach {
                 when (it) {
-                    is AuthResult.Success -> {
+                    is AuthenticationResult.Success -> {
                         authResultUiStateChannel.trySend(Unit)
                     }
 
-                    is AuthResult.Failure -> {
+                    is AuthenticationResult.Failure -> {
                         showErrorMessage(it.error)
                     }
 
-                    is AuthResult.Dismissed -> {
+                    is AuthenticationResult.Dismissed -> {
                         showErrorMessage(it.error ?: "")
                     }
                 }

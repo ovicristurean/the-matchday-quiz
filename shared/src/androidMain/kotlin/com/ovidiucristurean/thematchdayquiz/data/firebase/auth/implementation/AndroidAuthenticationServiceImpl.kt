@@ -8,7 +8,7 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthResult
+import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthenticationResult
 import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.AuthenticationState
 import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.api.AndroidAuthenticationService
 import com.ovidiucristurean.thematchdayquiz.data.firebase.auth.authenticate
@@ -35,29 +35,29 @@ class AndroidAuthenticationServiceImpl : AuthenticationServiceImpl(), AndroidAut
 
     private val googleClient = GoogleSignIn.getClient(activityProvider.get(), googleRequest)
 
-    override fun loginWithFacebookAccount(): Flow<AuthResult> = callbackFlow {
+    override fun loginWithFacebookAccount(): Flow<AuthenticationResult> = callbackFlow {
         LoginManager.getInstance()
             .logInWithReadPermissions(activityProvider.get(), listOf("public_profile", "email"))
         LoginManager.getInstance().registerCallback(
             facebookAuthManager,
             object : FacebookCallback<LoginResult> {
                 override fun onError(error: FacebookException) {
-                    trySendBlocking(element = AuthResult.Failure(error = error.message.orEmpty()))
+                    trySendBlocking(element = AuthenticationResult.Failure(error = error.message.orEmpty()))
                 }
 
                 override fun onSuccess(result: LoginResult) {
-                    trySendBlocking(element = AuthResult.Success(data = result.accessToken.token))
+                    trySendBlocking(element = AuthenticationResult.Success(data = result.accessToken.token))
                 }
 
                 override fun onCancel() {
-                    trySendBlocking(element = AuthResult.Dismissed())
+                    trySendBlocking(element = AuthenticationResult.Dismissed())
                 }
             }
         )
         awaitClose { LoginManager.getInstance().unregisterCallback(facebookAuthManager) }
     }.transform { result ->
         when (result) {
-            is AuthResult.Success -> {
+            is AuthenticationResult.Success -> {
                 val authCredential =
                     FacebookAuthProvider.credential(accessToken = result.data as String)
                 authenticate(
@@ -66,8 +66,8 @@ class AndroidAuthenticationServiceImpl : AuthenticationServiceImpl(), AndroidAut
                 ).collect { res -> emit(value = res) }
             }
 
-            is AuthResult.Failure -> emit(value = AuthResult.Failure(error = result.error))
-            is AuthResult.Dismissed -> emit(value = AuthResult.Dismissed())
+            is AuthenticationResult.Failure -> emit(value = AuthenticationResult.Failure(error = result.error))
+            is AuthenticationResult.Dismissed -> emit(value = AuthenticationResult.Dismissed())
         }
     }
 
@@ -77,14 +77,14 @@ class AndroidAuthenticationServiceImpl : AuthenticationServiceImpl(), AndroidAut
 
     override fun getIntentForGoogleAccountLogin(): Intent = googleClient.signInIntent
 
-    override fun loginWithGoogleAccount(intent: Intent): Flow<AuthResult> = callbackFlow {
+    override fun loginWithGoogleAccount(intent: Intent): Flow<AuthenticationResult> = callbackFlow {
         GoogleSignIn.getSignedInAccountFromIntent(intent)
-            .addOnSuccessListener { result -> trySend(element = AuthResult.Success(data = result.idToken)) }
-            .addOnFailureListener { error -> trySend(element = AuthResult.Failure(error = error.message.orEmpty())).isFailure }
+            .addOnSuccessListener { result -> trySend(element = AuthenticationResult.Success(data = result.idToken)) }
+            .addOnFailureListener { error -> trySend(element = AuthenticationResult.Failure(error = error.message.orEmpty())).isFailure }
         awaitClose { }
     }.transform { result ->
         when (result) {
-            is AuthResult.Success -> {
+            is AuthenticationResult.Success -> {
                 val authCredential = GoogleAuthProvider.credential(
                     idToken = result.data as String,
                     accessToken = null
@@ -95,8 +95,8 @@ class AndroidAuthenticationServiceImpl : AuthenticationServiceImpl(), AndroidAut
                 ).collect { res -> emit(value = res) }
             }
 
-            is AuthResult.Failure -> emit(value = AuthResult.Failure(error = result.error))
-            is AuthResult.Dismissed -> emit(value = AuthResult.Dismissed())
+            is AuthenticationResult.Failure -> emit(value = AuthenticationResult.Failure(error = result.error))
+            is AuthenticationResult.Dismissed -> emit(value = AuthenticationResult.Dismissed())
         }
     }
 
