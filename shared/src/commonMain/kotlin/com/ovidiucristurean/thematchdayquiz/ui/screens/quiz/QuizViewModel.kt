@@ -1,9 +1,10 @@
 package com.ovidiucristurean.thematchdayquiz.ui.screens.quiz
 
+import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.CurrentQuiz
 import com.ovidiucristurean.thematchdayquiz.domain.quiz.model.QuizAnswer
 import com.ovidiucristurean.thematchdayquiz.domain.quiz.repository.QuizRepository
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class QuizViewModel(
     private val quizRepository: QuizRepository,
-) : ViewModel() {
+) : ScreenModel {
 
     private val _state: MutableStateFlow<QuizScreenUiState> =
         MutableStateFlow(QuizScreenUiState.QuizNotStarted)
@@ -24,7 +25,7 @@ class QuizViewModel(
 
     init {
         //mocked quiz data
-        viewModelScope.launch {
+        screenModelScope.launch {
 
             when (val currentQuiz = quizRepository.getCurrentQuiz()) {
                 is CurrentQuiz.QuizNotReady -> {
@@ -66,7 +67,7 @@ class QuizViewModel(
     }
 
     private fun playQuiz(quiz: CurrentQuiz.AvailableQuiz) {
-        viewModelScope.launch {
+        screenModelScope.launch {
             quiz.questions.forEachIndexed { index, _ ->
                 quizInProgressState = quizInProgressState.copy(
                     currentQuestionNumber = index + 1,

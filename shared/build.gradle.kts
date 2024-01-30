@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.compose")
     kotlin("plugin.serialization")
     id("io.github.luca992.multiplatform-swiftpackage") version "2.2.0"
+    id("app.cash.sqldelight")
 }
 
 kotlin {
@@ -60,6 +61,9 @@ kotlin {
 
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+
+                //multiplatform settings
+                implementation(libs.multiplatform.settings)
             }
         }
         val commonTest by getting {
@@ -74,6 +78,7 @@ kotlin {
                 implementation(libs.firebase.facebook)
                 implementation(libs.play.services.auth)
                 implementation(libs.koin.android)
+                implementation(libs.sql.delight.android)
             }
         }
         val androidUnitTest by getting
@@ -86,6 +91,18 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+
+            dependencies {
+                implementation(libs.sql.delight.ios)
+            }
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("MatchdayDatabase") {
+            packageName.set("com.ovidiucristurean.thematchdayquiz")
         }
     }
 }
@@ -109,7 +126,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.core)
-//    implementation(project(mapOf("path" to ":quiz")))
     commonMainApi(libs.moko.mvvm.core)
     commonMainApi(libs.moko.mvvm.compose)
     commonMainApi(libs.moko.mvvm.flow)
@@ -121,6 +137,6 @@ multiplatformSwiftPackage {
     swiftToolsVersion("5.9")
     targetPlatforms {
         iOS { v("14") }
-        macOS { v("12")}
+        macOS { v("12") }
     }
 }

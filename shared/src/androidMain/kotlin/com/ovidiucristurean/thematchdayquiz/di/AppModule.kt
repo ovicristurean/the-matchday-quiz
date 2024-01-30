@@ -9,4 +9,5 @@ actual fun createAppModule(): List<Module> = buildList {
     add(commonModule)
     addAll(createAuthenticationModule())
     add(createUseCaseModule())
+    add(createLocalDataStorageModule())
 }

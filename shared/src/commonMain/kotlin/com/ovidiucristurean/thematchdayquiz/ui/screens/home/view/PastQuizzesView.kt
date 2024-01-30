@@ -20,13 +20,14 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun PastQuizzesView(
     modifier: Modifier,
+    numberOfItems: Int,
     onQuizClicked: () -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(12) {
+        items(numberOfItems) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -5,6 +5,7 @@ import com.ovidiucristurean.thematchdayquiz.ui.screens.home.state.viewdata.UserV
 data class HomeScreenUiState(
     val user: UserViewData? = null,
     val currentQuiz: AvailableQuizState = AvailableQuizState.CurrentQuizNotAvailable(1000L),
+    val pastQuizzes: List<String> = emptyList()
 )
 
 sealed class AvailableQuizState {
@@ -15,6 +16,5 @@ sealed class AvailableQuizState {
 
     data class QuizAvailable(
         val quizImageUrl: String,
-        val numberOfQuestions: Int,
     ) : AvailableQuizState()
 }

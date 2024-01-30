@@ -26,20 +26,15 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.AvailableQuizView
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.PastQuizzesView
 import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.QuizScreen
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class HomeScreen : Screen {
+class HomeScreen : Screen, KoinComponent {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = getViewModel(
-            key = "home-screen",
-            factory = viewModelFactory {
-                HomeScreenViewModel()
-            }
-        )
+        val viewModel: HomeScreenViewModel by inject()
         var spacerWidth by remember { mutableStateOf(0) }
         val state by viewModel.state.collectAsState()
 
@@ -75,6 +70,7 @@ class HomeScreen : Screen {
 
             PastQuizzesView(
                 modifier = Modifier.fillMaxSize().padding(vertical = 16.dp),
+                numberOfItems = state.pastQuizzes.size,
                 onQuizClicked = {
                     //TODO implement screen to view past quiz results
                 }

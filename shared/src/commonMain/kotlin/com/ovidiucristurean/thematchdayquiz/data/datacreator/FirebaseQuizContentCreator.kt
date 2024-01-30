@@ -38,16 +38,12 @@ class FirebaseQuizContentCreator {
                 quiz = quiz.copy(
                     id = it.id
                 )
-                println("OVI: quiz id is ${quiz.id}")
 
                 //create this quiz for each existing user
                 firestore.collection("users").get()
                     .documents
                     .map { it.data<User>() }
                     .forEach { user ->
-                        println(
-                            "OVI: user ${user.uid}"
-                        )
                         val userQuizCollection = firestore.collection("userQuizzes")
                         userQuizCollection.add(
                             UserQuiz.serializer(),
