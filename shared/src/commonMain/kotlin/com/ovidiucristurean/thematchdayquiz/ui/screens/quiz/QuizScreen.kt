@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,13 +34,19 @@ import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.widget.QuizProgressV
 import com.ovidiucristurean.thematchdayquiz.ui.widget.button.MatchdayButton
 import com.seiko.imageloader.rememberImagePainter
 
-class QuizScreen : Screen {
+class QuizScreen(
+    private val quizId: String
+) : Screen {
 
     @Composable
     override fun Content() {
         val viewModel = getScreenModel<QuizViewModel>()
         val state by viewModel.state.collectAsState()
         val navigator = LocalNavigator.currentOrThrow
+
+        LaunchedEffect(Unit) {
+            viewModel.fetchCurrentQuiz(quizId)
+        }
 
         when (val quizState = state) {
             QuizScreenUiState.QuizNotStarted -> {

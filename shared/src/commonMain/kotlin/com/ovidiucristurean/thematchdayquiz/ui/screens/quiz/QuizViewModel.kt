@@ -9,6 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -23,31 +24,31 @@ class QuizViewModel(
     private var quizInProgressState = QuizScreenUiState.QuizScreenInProgress()
     private var answeredQuestionsSet = mutableSetOf<QuizAnswer>()
 
-    init {
-        //mocked quiz data
+    fun fetchCurrentQuiz(quizId: String) {
         screenModelScope.launch {
+            quizRepository.getCurrentQuiz(quizId).collectLatest { currentQuiz ->
+                when (currentQuiz) {
+                    is CurrentQuiz.QuizNotReady -> {
 
-            when (val currentQuiz = quizRepository.getCurrentQuiz()) {
-                is CurrentQuiz.QuizNotReady -> {
-
-                }
-
-                is CurrentQuiz.QuizNotAvailable -> {
-
-                }
-
-                is CurrentQuiz.AvailableQuiz -> {
-                    quizInProgressState = QuizScreenUiState.QuizScreenInProgress(
-                        numberOfQuestions = currentQuiz.questions.size,
-                        currentQuestionNumber = 1,
-                        currentQuestion = currentQuiz.questions.firstOrNull(),
-                        timeLeftForQuestion = currentQuiz.questions.firstOrNull()?.timePerQuestion,
-                    )
-                    _state.update {
-                        quizInProgressState
                     }
 
-                    playQuiz(currentQuiz)
+                    is CurrentQuiz.QuizNotAvailable -> {
+
+                    }
+
+                    is CurrentQuiz.AvailableQuiz -> {
+                        quizInProgressState = QuizScreenUiState.QuizScreenInProgress(
+                            numberOfQuestions = currentQuiz.questions.size,
+                            currentQuestionNumber = 1,
+                            currentQuestion = currentQuiz.questions.firstOrNull(),
+                            timeLeftForQuestion = currentQuiz.questions.firstOrNull()?.timePerQuestion,
+                        )
+                        _state.update {
+                            quizInProgressState
+                        }
+
+                        playQuiz(currentQuiz)
+                    }
                 }
             }
         }

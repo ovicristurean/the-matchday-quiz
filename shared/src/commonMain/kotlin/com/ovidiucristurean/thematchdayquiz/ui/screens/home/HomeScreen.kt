@@ -25,7 +25,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.AvailableQuizView
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.view.PastQuizzesView
-import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.QuizScreen
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -50,7 +49,9 @@ class HomeScreen : Screen, KoinComponent {
                     .padding(all = 16.dp),
                 currentQuizState = state.currentQuiz,
                 onClick = {
-                    navigator.parent?.parent?.push(QuizScreen())
+                    navigator.parent?.parent?.let {
+                        viewModel.openQuiz(it)
+                    }
                 }
             )
 
