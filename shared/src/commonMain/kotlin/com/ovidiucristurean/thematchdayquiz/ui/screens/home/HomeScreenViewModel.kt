@@ -3,16 +3,20 @@ package com.ovidiucristurean.thematchdayquiz.ui.screens.home
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import cafe.adriel.voyager.navigator.Navigator
+import com.ovidiucristurean.thematchdayquiz.ThreadChecker
 import com.ovidiucristurean.thematchdayquiz.data.firebase.quiz.UserQuiz
 import com.ovidiucristurean.thematchdayquiz.domain.quiz.repository.QuizRepository
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.state.AvailableQuizState
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.state.HomeScreenUiState
 import com.ovidiucristurean.thematchdayquiz.ui.screens.home.state.viewdata.UserViewData
 import com.ovidiucristurean.thematchdayquiz.ui.screens.quiz.QuizScreen
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeScreenViewModel(
     private val quizRepository: QuizRepository
@@ -23,6 +27,8 @@ class HomeScreenViewModel(
 
     private var currentQuiz: UserQuiz? = null
     private var pastQuizzes: List<UserQuiz> = emptyList()
+
+    private val threadChecker = ThreadChecker()
 
     init {
         _state.update {
